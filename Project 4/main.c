@@ -6,9 +6,7 @@
 
 #define BG	White
 #define FG	Magenta
-#define FG2	Blue
 #define N	50
-#define CORNER	5
 
 void line(int x0, int y0, int x1, int y1, unsigned short dimArray[][N]) {
  
@@ -75,7 +73,6 @@ void convToBitmap(unsigned short dimArray[][N], unsigned short bitmap[N])
 			}	else {
 				bitmap[index] = BG;
 			}
-			
 			index++;
 		}
 	}
