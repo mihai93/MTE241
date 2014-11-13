@@ -37,13 +37,6 @@ int main( void ) {
 	GLCD_Init();
 	GLCD_Clear(BG); 
 
-// 	for (i = 0; i<10;i++)
-// 		square[i] = FG2;
-// 	for (i = 10; i< (N*N)-10; i++)
-// 		square[i] = FG;		
-// 	for (i = (N*N)-10;i<N*N;i++)
-// 		square[i] = FG2;
-
 	x0 = N/2;
 	y0 = N/2;
 	radius = N/2;
@@ -54,12 +47,8 @@ int main( void ) {
 	y = radius-1;
 	
 	line(x0, y - radius, x0, y0 + radius, circle);
-// 	circle[x0][y0 + radius] = FG;
-// 	circle[x0][y0 - radius] = FG;
 	line(x0 - radius, y0, x0 + radius, y0, circle);
-// 	circle[x0 + radius][y0] = FG;
-// 	circle[x0 - radius][y0] = FG;
-	printf("Test1");
+
 	while(x < y)
 	{
 		if(f >= 0)
@@ -73,17 +62,9 @@ int main( void ) {
 		f += ddF_x + 1;
 		
 		line(x0 - x, y0 + y, x0 + x, y0 + y, circle);
-		//circle[x0 + x][y0 + y] = FG;
-	  //circle[x0 - x][y0 + y] = FG;
 		line(x0 - x, y0 - y, x0 + x, y0 - y, circle);
-		//circle[x0 + x][y0 - y] = FG;
-		//circle[x0 - x][y0 - y] = FG;
 		line(x0 - y, y0 + x, x0 + y, y0 + x, circle);
-		//circle[x0 + y][y0 + x] = FG;
-		//circle[x0 - y][y0 + x] = FG;
 		line(x0 - y, y0 - x, x0 + y, y0 - x, circle);
-		//circle[x0 + y][y0 - x] = FG;
-		//circle[x0 - y][y0 - x] = FG;
 	}
 	
 
@@ -100,21 +81,6 @@ int main( void ) {
 			}	else {
 				circleBitmap[index] = BG;
 			}
-			
-			index++;
-		}
-	}
-
-	index = 0;
-	
-	for (i = 0;i<N;i++)
-	{
-		for (j = 0;j<N;j++)
-		{
-			if ((i < CORNER || i >= N - CORNER) && (j < CORNER || j >= N - CORNER))
-				square[index] = FG;
-			else
-				square[index] = FG2;
 			
 			index++;
 		}
