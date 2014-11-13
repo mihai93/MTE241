@@ -287,16 +287,16 @@ Image Symbol Table
     wr_dat_only                              0x0000117d   Thumb Code    18  glcd_spi_lpc1700.o(.text)
     wr_reg                                   0x0000118f   Thumb Code    20  glcd_spi_lpc1700.o(.text)
     .text                                    0x000011bc   Section        0  main.o(.text)
-    .text                                    0x000013c8   Section        0  glcd_scroll.o(.text)
-    .text                                    0x0000171c   Section      100  rt_memcpy_w.o(.text)
-    .text                                    0x00001780   Section       78  rt_memclr_w.o(.text)
-    .text                                    0x000017ce   Section       74  sys_stackheap_outer.o(.text)
-    .text                                    0x00001818   Section        0  exit.o(.text)
-    .text                                    0x00001824   Section        8  libspace.o(.text)
-    i.last_line                              0x0000182c   Section        0  glcd_scroll.o(i.last_line)
-    i.last_window_line                       0x0000184c   Section        0  glcd_scroll.o(i.last_window_line)
-    .constdata                               0x0000186c   Section     6272  glcd_spi_lpc1700.o(.constdata)
-    .constdata                               0x000030ec   Section      104  main.o(.constdata)
+    .text                                    0x000013b0   Section        0  glcd_scroll.o(.text)
+    .text                                    0x00001704   Section      100  rt_memcpy_w.o(.text)
+    .text                                    0x00001768   Section       78  rt_memclr_w.o(.text)
+    .text                                    0x000017b6   Section       74  sys_stackheap_outer.o(.text)
+    .text                                    0x00001800   Section        0  exit.o(.text)
+    .text                                    0x0000180c   Section        8  libspace.o(.text)
+    i.last_line                              0x00001814   Section        0  glcd_scroll.o(i.last_line)
+    i.last_window_line                       0x00001834   Section        0  glcd_scroll.o(i.last_window_line)
+    .constdata                               0x00001854   Section     6272  glcd_spi_lpc1700.o(.constdata)
+    .constdata                               0x000030d4   Section      100  main.o(.constdata)
     .data                                    0x10000000   Section        4  system_lpc17xx.o(.data)
     .data                                    0x10000004   Section        5  glcd_spi_lpc1700.o(.data)
     Color                                    0x10000004   Data           4  glcd_spi_lpc1700.o(.data)
@@ -471,37 +471,37 @@ Image Symbol Table
     line                                     0x000011bd   Thumb Code   158  main.o(.text)
     createCircle                             0x0000125b   Thumb Code   178  main.o(.text)
     convToBitmap                             0x0000130d   Thumb Code    86  main.o(.text)
-    main                                     0x00001363   Thumb Code    98  main.o(.text)
-    init_scroll                              0x000013c9   Thumb Code    50  glcd_scroll.o(.text)
-    refresh_lcd                              0x000013fb   Thumb Code    66  glcd_scroll.o(.text)
-    append_char                              0x0000143d   Thumb Code   216  glcd_scroll.o(.text)
-    print_text                               0x00001515   Thumb Code    24  glcd_scroll.o(.text)
-    print_string                             0x0000152d   Thumb Code    34  glcd_scroll.o(.text)
-    moveUp                                   0x0000154f   Thumb Code    58  glcd_scroll.o(.text)
-    moveDown                                 0x00001589   Thumb Code    60  glcd_scroll.o(.text)
-    moveFirst                                0x000015c5   Thumb Code    42  glcd_scroll.o(.text)
-    moveLast                                 0x000015ef   Thumb Code    82  glcd_scroll.o(.text)
-    initJoyStick                             0x00001641   Thumb Code    98  glcd_scroll.o(.text)
-    joyStickBusyWaitingMonitor               0x000016a3   Thumb Code    86  glcd_scroll.o(.text)
-    __aeabi_memcpy4                          0x0000171d   Thumb Code     0  rt_memcpy_w.o(.text)
-    __aeabi_memcpy8                          0x0000171d   Thumb Code     0  rt_memcpy_w.o(.text)
-    __rt_memcpy_w                            0x0000171d   Thumb Code   100  rt_memcpy_w.o(.text)
-    _memcpy_lastbytes_aligned                0x00001765   Thumb Code     0  rt_memcpy_w.o(.text)
-    __aeabi_memclr4                          0x00001781   Thumb Code     0  rt_memclr_w.o(.text)
-    __aeabi_memclr8                          0x00001781   Thumb Code     0  rt_memclr_w.o(.text)
-    __rt_memclr_w                            0x00001781   Thumb Code    78  rt_memclr_w.o(.text)
-    _memset_w                                0x00001785   Thumb Code     0  rt_memclr_w.o(.text)
-    __user_setup_stackheap                   0x000017cf   Thumb Code    74  sys_stackheap_outer.o(.text)
-    exit                                     0x00001819   Thumb Code    12  exit.o(.text)
-    __user_libspace                          0x00001825   Thumb Code     8  libspace.o(.text)
-    __user_perproc_libspace                  0x00001825   Thumb Code     0  libspace.o(.text)
-    __user_perthread_libspace                0x00001825   Thumb Code     0  libspace.o(.text)
-    last_line                                0x0000182d   Thumb Code    22  glcd_scroll.o(i.last_line)
-    last_window_line                         0x0000184d   Thumb Code    22  glcd_scroll.o(i.last_window_line)
-    Font_6x8_h                               0x0000186c   Data         896  glcd_spi_lpc1700.o(.constdata)
-    Font_16x24_h                             0x00001bec   Data        5376  glcd_spi_lpc1700.o(.constdata)
-    Region$$Table$$Base                      0x00003154   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00003174   Number         0  anon$$obj.o(Region$$Table)
+    main                                     0x00001363   Thumb Code    74  main.o(.text)
+    init_scroll                              0x000013b1   Thumb Code    50  glcd_scroll.o(.text)
+    refresh_lcd                              0x000013e3   Thumb Code    66  glcd_scroll.o(.text)
+    append_char                              0x00001425   Thumb Code   216  glcd_scroll.o(.text)
+    print_text                               0x000014fd   Thumb Code    24  glcd_scroll.o(.text)
+    print_string                             0x00001515   Thumb Code    34  glcd_scroll.o(.text)
+    moveUp                                   0x00001537   Thumb Code    58  glcd_scroll.o(.text)
+    moveDown                                 0x00001571   Thumb Code    60  glcd_scroll.o(.text)
+    moveFirst                                0x000015ad   Thumb Code    42  glcd_scroll.o(.text)
+    moveLast                                 0x000015d7   Thumb Code    82  glcd_scroll.o(.text)
+    initJoyStick                             0x00001629   Thumb Code    98  glcd_scroll.o(.text)
+    joyStickBusyWaitingMonitor               0x0000168b   Thumb Code    86  glcd_scroll.o(.text)
+    __aeabi_memcpy4                          0x00001705   Thumb Code     0  rt_memcpy_w.o(.text)
+    __aeabi_memcpy8                          0x00001705   Thumb Code     0  rt_memcpy_w.o(.text)
+    __rt_memcpy_w                            0x00001705   Thumb Code   100  rt_memcpy_w.o(.text)
+    _memcpy_lastbytes_aligned                0x0000174d   Thumb Code     0  rt_memcpy_w.o(.text)
+    __aeabi_memclr4                          0x00001769   Thumb Code     0  rt_memclr_w.o(.text)
+    __aeabi_memclr8                          0x00001769   Thumb Code     0  rt_memclr_w.o(.text)
+    __rt_memclr_w                            0x00001769   Thumb Code    78  rt_memclr_w.o(.text)
+    _memset_w                                0x0000176d   Thumb Code     0  rt_memclr_w.o(.text)
+    __user_setup_stackheap                   0x000017b7   Thumb Code    74  sys_stackheap_outer.o(.text)
+    exit                                     0x00001801   Thumb Code    12  exit.o(.text)
+    __user_libspace                          0x0000180d   Thumb Code     8  libspace.o(.text)
+    __user_perproc_libspace                  0x0000180d   Thumb Code     0  libspace.o(.text)
+    __user_perthread_libspace                0x0000180d   Thumb Code     0  libspace.o(.text)
+    last_line                                0x00001815   Thumb Code    22  glcd_scroll.o(i.last_line)
+    last_window_line                         0x00001835   Thumb Code    22  glcd_scroll.o(i.last_window_line)
+    Font_6x8_h                               0x00001854   Data         896  glcd_spi_lpc1700.o(.constdata)
+    Font_16x24_h                             0x00001bd4   Data        5376  glcd_spi_lpc1700.o(.constdata)
+    Region$$Table$$Base                      0x00003138   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x00003158   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x10000000   Data           4  system_lpc17xx.o(.data)
     cache_start                              0x1000000c   Data           4  glcd_scroll.o(.data)
     cache_size                               0x10000010   Data           4  glcd_scroll.o(.data)
@@ -520,9 +520,9 @@ Memory Map of the image
 
   Image Entry point : 0x000000cd
 
-  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00003194, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00003178, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00003174, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00003158, Max: 0x00080000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -581,18 +581,18 @@ Memory Map of the image
     0x000002fc   0x00000004   Code   RO            4    .ARM.__at_0x02FC    startup_lpc17xx.o
     0x00000300   0x00000318   Code   RO           15    .text               system_lpc17xx.o
     0x00000618   0x00000ba4   Code   RO           58    .text               glcd_spi_lpc1700.o
-    0x000011bc   0x0000020c   Code   RO          102    .text               main.o
-    0x000013c8   0x00000354   Code   RO          158    .text               glcd_scroll.o
-    0x0000171c   0x00000064   Code   RO          211    .text               c_w.l(rt_memcpy_w.o)
-    0x00001780   0x0000004e   Code   RO          213    .text               c_w.l(rt_memclr_w.o)
-    0x000017ce   0x0000004a   Code   RO          241    .text               c_w.l(sys_stackheap_outer.o)
-    0x00001818   0x0000000c   Code   RO          243    .text               c_w.l(exit.o)
-    0x00001824   0x00000008   Code   RO          255    .text               c_w.l(libspace.o)
-    0x0000182c   0x00000020   Code   RO          177    i.last_line         glcd_scroll.o
-    0x0000184c   0x00000020   Code   RO          182    i.last_window_line  glcd_scroll.o
-    0x0000186c   0x00001880   Data   RO           59    .constdata          glcd_spi_lpc1700.o
-    0x000030ec   0x00000068   Data   RO          103    .constdata          main.o
-    0x00003154   0x00000020   Data   RO          373    Region$$Table       anon$$obj.o
+    0x000011bc   0x000001f4   Code   RO          102    .text               main.o
+    0x000013b0   0x00000354   Code   RO          158    .text               glcd_scroll.o
+    0x00001704   0x00000064   Code   RO          211    .text               c_w.l(rt_memcpy_w.o)
+    0x00001768   0x0000004e   Code   RO          213    .text               c_w.l(rt_memclr_w.o)
+    0x000017b6   0x0000004a   Code   RO          241    .text               c_w.l(sys_stackheap_outer.o)
+    0x00001800   0x0000000c   Code   RO          243    .text               c_w.l(exit.o)
+    0x0000180c   0x00000008   Code   RO          255    .text               c_w.l(libspace.o)
+    0x00001814   0x00000020   Code   RO          177    i.last_line         glcd_scroll.o
+    0x00001834   0x00000020   Code   RO          182    i.last_window_line  glcd_scroll.o
+    0x00001854   0x00001880   Data   RO           59    .constdata          glcd_spi_lpc1700.o
+    0x000030d4   0x00000064   Data   RO          103    .constdata          main.o
+    0x00003138   0x00000020   Data   RO          373    Region$$Table       anon$$obj.o
 
 
     Execution Region RW_IRAM1 (Base: 0x10000000, Size: 0x00002290, Max: 0x00008000, ABSOLUTE)
@@ -619,13 +619,13 @@ Image component sizes
 
        916         56          0         20        525       5373   glcd_scroll.o
       2980         62       6272          5          0       8652   glcd_spi_lpc1700.o
-       524          4        104          0          0       1670   main.o
+       500          4        100          0          0       1546   main.o
         94          0          0          0          0       2783   retarget.o
         64         26        204          0       8192        848   startup_lpc17xx.o
        792         78          0          4          0       5141   system_lpc17xx.o
 
     ----------------------------------------------------------------------
-      5370        226       6612         32       8720      24467   Object Totals
+      5346        226       6608         32       8720      24343   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          0          0          0          3          3          0   (incl. Padding)
 
@@ -675,15 +675,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      6048        238       6612         32       8816      24247   Grand Totals
-      6048        238       6612         32       8816      24247   ELF Image Totals
-      6048        238       6612         32          0          0   ROM Totals
+      6024        238       6608         32       8816      24123   Grand Totals
+      6024        238       6608         32       8816      24123   ELF Image Totals
+      6024        238       6608         32          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                12660 (  12.36kB)
+    Total RO  Size (Code + RO Data)                12632 (  12.34kB)
     Total RW  Size (RW Data + ZI Data)              8848 (   8.64kB)
-    Total ROM Size (Code + RO Data + RW Data)      12692 (  12.39kB)
+    Total ROM Size (Code + RO Data + RW Data)      12664 (  12.37kB)
 
 ==============================================================================
 

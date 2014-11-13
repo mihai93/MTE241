@@ -83,10 +83,8 @@ void convToBitmap(unsigned short dimArray[][N], unsigned short bitmap[N])
 
 int main( void ) {
 	/*** Declare all variables ***/
-	unsigned short square[N] = BG;
 	unsigned short circle[N][N] = {BG};
 	unsigned short circleBitmap[N];
-  int i, j, k, radius, f, ddF_x, ddF_y, r, c, index, x, y, x0, y0; 
 	/*** Declare all variables ***/
 	
 	SystemInit();
@@ -99,5 +97,4 @@ int main( void ) {
 	GLCD_Bitmap (160-N/2, 120-N/2, N, N, (unsigned char*)circleBitmap);
 
   while(1);
-}
-	
+}	
