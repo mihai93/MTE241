@@ -8,7 +8,7 @@
 #define FG	Magenta
 #define N	50
 
-void line(int x0, int y0, int x1, int y1, unsigned short dimArray[][N]) {
+void line(int x0, int y0, int x1, int y1, unsigned short **dimArray) {
  
   int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
   int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1; 
@@ -23,7 +23,7 @@ void line(int x0, int y0, int x1, int y1, unsigned short dimArray[][N]) {
   }
 }
 
-void convToBitmap(unsigned short dimArray[][N], unsigned short bitmap[N])
+void convToBitmap(unsigned short **dimArray, unsigned short bitmap[N])
 {
 	int i, j, index;
 	index = 0;
@@ -44,9 +44,16 @@ void convToBitmap(unsigned short dimArray[][N], unsigned short bitmap[N])
 
 void createCircle(int xcenter, int ycenter)
 {
-	unsigned short circle[N][N] = {BG};
+	unsigned short **circle;
+	//unsigned short circle[N][N] = {BG};
 	unsigned short circleBitmap[N];
-	int x0, y0, f, dFx, dFy, x, y, radius;
+	int i, x0, y0, f, dFx, dFy, x, y, radius;
+	
+	circle = (unsigned short**)malloc(N * sizeof(unsigned short *));
+	for (i = 0; i < N; i++)
+	{
+		circle[i] = (unsigned short*)malloc(N * sizeof(unsigned short *));
+	}
 	
 	x0 = N/2;
 	y0 = N/2;
