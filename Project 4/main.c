@@ -23,8 +23,29 @@ void line(int x0, int y0, int x1, int y1, unsigned short dimArray[][N]) {
   }
 }
 
-void createCircle(unsigned short circle[][N])
+void convToBitmap(unsigned short dimArray[][N], unsigned short bitmap[N])
 {
+	int i, j, index;
+	index = 0;
+	
+	for (i = 0;i<N;i++)
+	{
+		for (j = 0;j<N;j++)
+		{
+			if (dimArray[j][i] == FG)
+				bitmap[index] = dimArray[j][i];
+			else
+				bitmap[index] = BG;
+			
+			index++;
+		}
+	}
+}
+
+void createCircle(int xcenter, int ycenter)
+{
+	unsigned short circle[N][N] = {BG};
+	unsigned short circleBitmap[N];
 	int x0, y0, f, dFx, dFy, x, y, radius;
 	
 	x0 = N/2;
@@ -56,42 +77,21 @@ void createCircle(unsigned short circle[][N])
 		line(x0 - y, y0 + x, x0 + y, y0 + x, circle);
 		line(x0 - y, y0 - x, x0 + y, y0 - x, circle);
 	}
-}
-
-void convToBitmap(unsigned short dimArray[][N], unsigned short bitmap[N])
-{
-	int i, j, index;
-	index = 0;
-	
-	for (i = 0;i<N;i++)
-	{
-		for (j = 0;j<N;j++)
-		{
-			if (dimArray[j][i] == FG)
-			{
-				bitmap[index] = dimArray[j][i];
-			}	else {
-				bitmap[index] = BG;
-			}
-			index++;
-		}
-	}
+	convToBitmap(circle, circleBitmap);
+	GLCD_Bitmap (xcenter - N/2, ycenter - N/2, N, N, (unsigned char*)circleBitmap);
 }
 
 int main( void ) {
 	/*** Declare all variables ***/
-	unsigned short circle[N][N] = {BG};
-	unsigned short circleBitmap[N];
+// 	unsigned short circle[N][N] = {BG};
+// 	unsigned short circleBitmap[N];
 	/*** Declare all variables ***/
 	
 	SystemInit();
 	GLCD_Init();
 	GLCD_Clear(BG); 
 	
-	createCircle(circle);
-	convToBitmap(circle, circleBitmap);
-
-	GLCD_Bitmap (160-N/2, 120-N/2, N, N, (unsigned char*)circleBitmap);
+	createCircle(160, 120);
 
   while(1);
 }	
