@@ -6,47 +6,14 @@
 
 #define BG	White
 #define FG	Magenta
-#define N	50
-
-void line(int x0, int y0, int x1, int y1, unsigned short dimArray[][N]) {
- 
-  int dx = abs(x1-x0), sx = x0<x1 ? 1 : -1;
-  int dy = abs(y1-y0), sy = y0<y1 ? 1 : -1; 
-  int err = (dx>dy ? dx : -dy)/2, e2;
- 
-  for(;;){
-		dimArray[x0][y0] = FG;
-    if (x0==x1 && y0==y1) break;
-    e2 = err;
-    if (e2 >-dx) { err -= dy; x0 += sx; }
-    if (e2 < dy) { err += dx; y0 += sy; }
-  }
-}
-
-void convToBitmap(unsigned short dimArray[][N], unsigned short bitmap[N])
-{
-	int i, j, index;
-	index = 0;
-	
-	for (i = 0;i<N;i++)
-	{
-		for (j = 0;j<N;j++)
-		{
-			if (dimArray[j][i] == FG)
-				bitmap[index] = dimArray[j][i];
-			else
-				bitmap[index] = BG;
-			
-			index++;
-		}
-	}
-}
+#define N 64
 
 void createCircle(int xcenter, int ycenter)
 {
-	unsigned short circle[N][N] = {BG};
-	unsigned short circleBitmap[N];
-	int x0, y0, f, dFx, dFy, x, y, radius;
+	unsigned short chircle[N][N] = {BG};
+	unsigned short bmp[N] = {BG};
+	unsigned short blankBmp[N] = {BG};
+	int i, x0, y0, f, dFx, dFy, x, y, radius;
 	
 	x0 = N/2;
 	y0 = N/2;
@@ -56,9 +23,14 @@ void createCircle(int xcenter, int ycenter)
 	dFy = -2 * radius;
 	x = 0;
 	y = radius-1;
+
+	bmp[(y - radius)*N + x0] = FG;
+	bmp[(y0 + radius)*N + x0] = FG;
+	bmp[y0*N + (x - radius)] = FG;
+	bmp[y0*N + (x0 - radius)] = FG;
 	
-	line(x0, y - radius, x0, y0 + radius, circle);
-	line(x0 - radius, y0, x0 + radius, y0, circle);
+	for(i=0;(x0-radius+i) <= (x0+radius);i++)
+		bmp[y0*N + (x0-radius+i)] = FG;
 
 	while(x < y)
 	{
@@ -72,13 +44,32 @@ void createCircle(int xcenter, int ycenter)
 		dFx += 2;
 		f += dFx + 1;
 		
-		line(x0 - x, y0 + y, x0 + x, y0 + y, circle);
-		line(x0 - x, y0 - y, x0 + x, y0 - y, circle);
-		line(x0 - y, y0 + x, x0 + y, y0 + x, circle);
-		line(x0 - y, y0 - x, x0 + y, y0 - x, circle);
+		for(i=0;(x0-x+i) <= (x0+x);i++)
+			bmp[(y0 + y)*N + (x0-x+i)] = FG;
+		
+		for(i=0;(x0-x+i) <= (x0+x);i++)
+			bmp[(y0 - y)*N + (x0-x+i)] = FG;
+		
+		for(i=0;(x0-y+i) <= (x0+y);i++)
+			bmp[(y0 + x)*N + (x0-y+i)] = FG;
+		
+		for(i=0;(x0-y+i) <= (x0+y);i++)
+			bmp[(y0 - x)*N + (x0-y+i)] = FG;
 	}
-	convToBitmap(circle, circleBitmap);
-	GLCD_Bitmap (xcenter - N/2, ycenter - N/2, N, N, (unsigned char*)circleBitmap);
+	
+	for (i = 0; i < N*N; i++)
+		if (bmp[i] != FG)
+			bmp[i] = BG;
+			
+	GLCD_Bitmap (xcenter - N/2, ycenter - N/2, N, N, (unsigned char*)bmp);
+	
+	i = 1;
+	while(1)
+	{
+		GLCD_Bitmap (160 - N/2 + i, 120 - N/2 + i, N, N, (unsigned char*)blankBmp);
+		GLCD_Bitmap (160 - N/2 + i, 120 - N/2 + i, N, N, (unsigned char*)bmp);
+		i++;
+	}
 }
 
 int main( void ) {
@@ -92,6 +83,7 @@ int main( void ) {
 	GLCD_Clear(BG); 
 	
 	createCircle(160, 120);
+	
 
   while(1);
 }	

@@ -296,7 +296,7 @@ Image Symbol Table
     i.last_line                              0x00001834   Section        0  glcd_scroll.o(i.last_line)
     i.last_window_line                       0x00001854   Section        0  glcd_scroll.o(i.last_window_line)
     .constdata                               0x00001874   Section     6272  glcd_spi_lpc1700.o(.constdata)
-    .constdata                               0x000030f4   Section      100  main.o(.constdata)
+    .constdata                               0x000030f4   Section      136  main.o(.constdata)
     .data                                    0x10000000   Section        4  system_lpc17xx.o(.data)
     .data                                    0x10000004   Section        5  glcd_spi_lpc1700.o(.data)
     Color                                    0x10000004   Data           4  glcd_spi_lpc1700.o(.data)
@@ -468,10 +468,8 @@ Image Symbol Table
     GLCD_ScrollVertical                      0x0000112d   Thumb Code     2  glcd_spi_lpc1700.o(.text)
     GLCD_WrCmd                               0x0000112f   Thumb Code    12  glcd_spi_lpc1700.o(.text)
     GLCD_WrReg                               0x0000113b   Thumb Code    16  glcd_spi_lpc1700.o(.text)
-    line                                     0x000011bd   Thumb Code   158  main.o(.text)
-    convToBitmap                             0x0000125b   Thumb Code    86  main.o(.text)
-    createCircle                             0x000012b1   Thumb Code   254  main.o(.text)
-    main                                     0x000013af   Thumb Code    28  main.o(.text)
+    createCircle                             0x000011bd   Thumb Code   504  main.o(.text)
+    main                                     0x000013b5   Thumb Code    24  main.o(.text)
     init_scroll                              0x000013d1   Thumb Code    50  glcd_scroll.o(.text)
     refresh_lcd                              0x00001403   Thumb Code    66  glcd_scroll.o(.text)
     append_char                              0x00001445   Thumb Code   216  glcd_scroll.o(.text)
@@ -500,8 +498,8 @@ Image Symbol Table
     last_window_line                         0x00001855   Thumb Code    22  glcd_scroll.o(i.last_window_line)
     Font_6x8_h                               0x00001874   Data         896  glcd_spi_lpc1700.o(.constdata)
     Font_16x24_h                             0x00001bf4   Data        5376  glcd_spi_lpc1700.o(.constdata)
-    Region$$Table$$Base                      0x00003158   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x00003178   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Base                      0x0000317c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0000319c   Number         0  anon$$obj.o(Region$$Table)
     SystemCoreClock                          0x10000000   Data           4  system_lpc17xx.o(.data)
     cache_start                              0x1000000c   Data           4  glcd_scroll.o(.data)
     cache_size                               0x10000010   Data           4  glcd_scroll.o(.data)
@@ -520,9 +518,9 @@ Memory Map of the image
 
   Image Entry point : 0x000000cd
 
-  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x00003198, Max: 0x00080000, ABSOLUTE)
+  Load Region LR_IROM1 (Base: 0x00000000, Size: 0x000031bc, Max: 0x00080000, ABSOLUTE)
 
-    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x00003178, Max: 0x00080000, ABSOLUTE)
+    Execution Region ER_IROM1 (Base: 0x00000000, Size: 0x0000319c, Max: 0x00080000, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -591,8 +589,8 @@ Memory Map of the image
     0x00001834   0x00000020   Code   RO          177    i.last_line         glcd_scroll.o
     0x00001854   0x00000020   Code   RO          182    i.last_window_line  glcd_scroll.o
     0x00001874   0x00001880   Data   RO           59    .constdata          glcd_spi_lpc1700.o
-    0x000030f4   0x00000064   Data   RO          103    .constdata          main.o
-    0x00003158   0x00000020   Data   RO          373    Region$$Table       anon$$obj.o
+    0x000030f4   0x00000088   Data   RO          103    .constdata          main.o
+    0x0000317c   0x00000020   Data   RO          373    Region$$Table       anon$$obj.o
 
 
     Execution Region RW_IRAM1 (Base: 0x10000000, Size: 0x00002290, Max: 0x00008000, ABSOLUTE)
@@ -617,15 +615,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       916         56          0         20        525       5337   glcd_scroll.o
-      2980         62       6272          5          0       8640   glcd_spi_lpc1700.o
-       532          6        100          0          0       1582   main.o
-        94          0          0          0          0       2759   retarget.o
+       916         56          0         20        525       5373   glcd_scroll.o
+      2980         62       6272          5          0       8652   glcd_spi_lpc1700.o
+       532          4        136          0          0       1184   main.o
+        94          0          0          0          0       2783   retarget.o
         64         26        204          0       8192        848   startup_lpc17xx.o
-       792         78          0          4          0       5121   system_lpc17xx.o
+       792         78          0          4          0       5141   system_lpc17xx.o
 
     ----------------------------------------------------------------------
-      5378        228       6608         32       8720      24287   Object Totals
+      5378        226       6644         32       8720      23981   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          0          0          0          3          3          0   (incl. Padding)
 
@@ -675,15 +673,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      6056        240       6608         32       8816      24067   Grand Totals
-      6056        240       6608         32       8816      24067   ELF Image Totals
-      6056        240       6608         32          0          0   ROM Totals
+      6056        238       6644         32       8816      23761   Grand Totals
+      6056        238       6644         32       8816      23761   ELF Image Totals
+      6056        238       6644         32          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                12664 (  12.37kB)
+    Total RO  Size (Code + RO Data)                12700 (  12.40kB)
     Total RW  Size (RW Data + ZI Data)              8848 (   8.64kB)
-    Total ROM Size (Code + RO Data + RW Data)      12696 (  12.40kB)
+    Total ROM Size (Code + RO Data + RW Data)      12732 (  12.43kB)
 
 ==============================================================================
 
