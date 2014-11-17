@@ -57,19 +57,26 @@ void createCircle(int xcenter, int ycenter)
 			bmp[(y0 - x)*N + (x0-y+i)] = FG;
 	}
 	
-	for (i = 0; i < N*N; i++)
+	for (i = 0; i < N*N; i++){
 		if (bmp[i] != FG)
 			bmp[i] = BG;
-			
+	}
+	
+	for (i = 0; i < N; i++){
+		blankBmp[i] = BG;
+	}
+	
 	GLCD_Bitmap (xcenter - N/2, ycenter - N/2, N, N, (unsigned char*)bmp);
+	GLCD_Bitmap (xcenter - N/2, ycenter - N/2, N, N, (unsigned char*)blankBmp);
+	GLCD_Bitmap (xcenter - N/2 + 5, ycenter - N/2 + 5, N, N, (unsigned char*)bmp);
 	
 // 	i = 1;
 // 	while(1)
 // 	{
-// 		GLCD_Bitmap (160 - N/2 + i, 120 - N/2 + i, N, N, (unsigned char*)blankBmp);
-// 		GLCD_Bitmap (160 - N/2 + i, 120 - N/2 + i, N, N, (unsigned char*)bmp);
+// 		GLCD_Bitmap (xcenter - N/2 + i, ycenter - N/2 + i, N, N, (unsigned char*)blankBmp);
+// 		GLCD_Bitmap (xcenter - N/2 + i, ycenter - N/2 + i, N, N, (unsigned char*)bmp);
 // 		i++;
-// 	}
+//  	}
 }
 
 int main( void ) {

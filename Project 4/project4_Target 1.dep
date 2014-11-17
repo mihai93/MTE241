@@ -17,7 +17,7 @@ I (C:\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h)(0x4F58E032)
 I (GLCD.h)(0x5463B5D7)
 I (Font_6x8_h.h)(0x5463B5CC)
 I (Font_16x24_h.h)(0x5463B5D5)
-F (.\main.c)(0x546A5D03)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\NXP\LPC17xx -o "main.o" --omf_browse "main.crf" --depend "main.d")
+F (.\main.c)(0x546A670B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Keil\ARM\RV31\INC -I C:\Keil\ARM\CMSIS\Include -I C:\Keil\ARM\Inc\NXP\LPC17xx -o "main.o" --omf_browse "main.crf" --depend "main.d")
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdio.h)(0x4EB16D36)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x4EB16D34)
 I (C:\Keil\ARM\ARMCC\bin\..\include\stdbool.h)(0x4EB16D38)

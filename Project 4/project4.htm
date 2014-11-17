@@ -3,9 +3,9 @@
 <title>Static Call Graph - [N:\MTE241\Project 4\project4.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image N:\MTE241\Project 4\project4.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Mon Nov 17 15:39:35 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Mon Nov 17 16:23:00 2014
 <BR><P>
-<H3>Maximum Stack Usage =       8656 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =       8648 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 <P>
@@ -191,7 +191,7 @@ Global Symbols
 <P><STRONG><a name="[94]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[3c]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8656 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 8648 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 </UL>
 <BR>[Calls]<UL><LI><a href="#[3e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;exit
@@ -568,8 +568,8 @@ Global Symbols
 <BR><BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wr_reg
 </UL>
 
-<P><STRONG><a name="[63]"></a>createCircle</STRONG> (Thumb, 468 bytes, Stack size 8560 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8656<LI>Call Chain = createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+<P><STRONG><a name="[63]"></a>createCircle</STRONG> (Thumb, 528 bytes, Stack size 8552 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8648<LI>Call Chain = createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 </UL>
 <BR>[Calls]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memcpy4
@@ -579,7 +579,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[3d]"></a>main</STRONG> (Thumb, 28 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 8656<LI>Call Chain = main &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+<BR><BR>[Stack]<UL><LI>Max Depth = 8648<LI>Call Chain = main &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 </UL>
 <BR>[Calls]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;createCircle
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Clear
