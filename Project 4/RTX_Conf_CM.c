@@ -24,7 +24,7 @@
 //   <i> Define max. number of tasks that will run at the same time.
 //   <i> Default: 6
 #ifndef OS_TASKCNT
- #define OS_TASKCNT     6
+ #define OS_TASKCNT     3
 #endif
 
 //   <o>Number of tasks with user-provided stack <0-250>
@@ -39,7 +39,7 @@
 //   <i> Set the stack size for tasks which is assigned by the system.
 //   <i> Default: 200
 #ifndef OS_STKSIZE
- #define OS_STKSIZE     200
+ #define OS_STKSIZE     750
 #endif
 
 // <q>Check for the stack overflow
@@ -83,7 +83,7 @@
 // =============================
 // <i> Enable Round-Robin Task switching.
 #ifndef OS_ROBIN
- #define OS_ROBIN       0
+ #define OS_ROBIN       1
 #endif
 
 //   <o>Round-Robin Timeout [ticks] <1-1000>

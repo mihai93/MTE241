@@ -200,7 +200,7 @@
             <GenPPlst>0</GenPPlst>
             <AdsCpuType>"Cortex-M3"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
-            <mOS>0</mOS>
+            <mOS>1</mOS>
             <uocRom>0</uocRom>
             <uocRam>0</uocRam>
             <hadIROM>1</hadIROM>
@@ -450,6 +450,11 @@
               <FileName>Font_6x8_h.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Font_6x8_h.h</FilePath>
+            </File>
+            <File>
+              <FileName>RTX_Conf_CM.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\RTX_Conf_CM.c</FilePath>
             </File>
           </Files>
         </Group>

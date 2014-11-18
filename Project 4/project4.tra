@@ -10,14 +10,14 @@
 ### List of Objects: adding '"rtx_conf_cm.o"'
 ### ADS-LD Command completed:
 --cpu Cortex-M3 "startup_lpc17xx.o" "system_lpc17xx.o" "glcd_spi_lpc1700.o" "main.o" "retarget.o" "glcd_scroll.o" "rtx_conf_cm.o" 
-C:\Keil\ARM\RV31\LIB\RTX_CM3.LIB --strict --scatter "project4.sct" 
+C:\Software\Keil\ARM\RV31\LIB\RTX_CM3.LIB --strict --scatter "project4.sct" 
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols 
 --info sizes --info totals --info unused --info veneers 
  --list ".\project4.map" -o project4.axf### Preparing Environment (PrepEnvAds)
 ### ADS-LD Output File: 'project4.axf'
 ### ADS-LD Command File: 'project4.lnp'
 ### Checking for dirty Components...
-### Creating CmdFile 'project4.lnp', Handle=0x000005E8
+### Creating CmdFile 'project4.lnp', Handle=0x000004E0
 ### Writing '.lnp' file
 ### ADS-LD Command file 'project4.lnp' is ready.
 ### ADS-LD: About to start ADS-LD Thread.

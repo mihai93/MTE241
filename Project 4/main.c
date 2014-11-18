@@ -7,7 +7,11 @@
 
 #define BG	White
 #define FG	Magenta
-#define N 64
+#define N 50
+
+unsigned short circle[N*N];
+int vx = 1;
+int vy = 1;
 
 volatile unsigned short int ADC_Value;
 
@@ -78,123 +82,127 @@ unsigned short int ADCValue( void ) {
 	return ADC_Value;
 }
 
-void eraseCircle(int xc, int yc, unsigned short bmp[N])
+void eraseCircle(int xc, int yc)
 {
 	int i;
 	
 	for (i = 0; i < N*N; i++)
-			bmp[i] = BG;
+			circle[i] = BG;
 	
-	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)bmp);
+	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)circle);
 	
 }
 
-void createCircle(int xc, int yc, unsigned short bmp[N])
+void createCircle(int xc, int yc)
 {
-	unsigned short chircle[N][N] = {BG};
-	//unsigned short bmp[N] = {BG};
-	unsigned short blankBmp[N] = {BG};
 	int i, x0, y0, f, dFx, dFy, x, y, radius;
 	
 	x0 = N/2;
 	y0 = N/2;
-	radius = N/2;
+	radius = N/2 - 4;
 	f = 1 - radius;
 	dFx = 0;
 	dFy = -2 * radius;
 	x = 0;
 	y = radius-1;
 
-	bmp[(y - radius)*N + x0] = FG;
-	bmp[(y0 + radius)*N + x0] = FG;
-	bmp[y0*N + (x - radius)] = FG;
-	bmp[y0*N + (x0 - radius)] = FG;
+	circle[(y - radius)*N + x0] = FG;
+	circle[(y0 + radius)*N + x0] = FG;
+	circle[y0*N + (x - radius)] = FG;
+	circle[y0*N + (x0 - radius)] = FG;
 	
 	for(i=0;(x0-radius+i) <= (x0+radius);i++)
-		bmp[y0*N + (x0-radius+i)] = FG;
+		circle[y0*N + (x0-radius+i)] = FG;
 
-	while(x < y)
-	{
-		if(f >= 0)
-		{
+	while(x < y){
+		if(f >= 0){
 			y--;
 			dFy += 2;
 			f += dFy;
 		}
+		
 		x++;
 		dFx += 2;
 		f += dFx + 1;
 		
 		for(i=0;(x0-x+i) <= (x0+x);i++)
-			bmp[(y0 + y)*N + (x0-x+i)] = FG;
+			circle[(y0 + y)*N + (x0-x+i)] = FG;
 		
 		for(i=0;(x0-x+i) <= (x0+x);i++)
-			bmp[(y0 - y)*N + (x0-x+i)] = FG;
+			circle[(y0 - y)*N + (x0-x+i)] = FG;
 		
 		for(i=0;(x0-y+i) <= (x0+y);i++)
-			bmp[(y0 + x)*N + (x0-y+i)] = FG;
+			circle[(y0 + x)*N + (x0-y+i)] = FG;
 		
 		for(i=0;(x0-y+i) <= (x0+y);i++)
-			bmp[(y0 - x)*N + (x0-y+i)] = FG;
+			circle[(y0 - x)*N + (x0-y+i)] = FG;
 	}
 	
 	for (i = 0; i < N*N; i++){
-		if (bmp[i] != FG)
-			bmp[i] = BG;
+		if (circle[i] != FG)
+			circle[i] = BG;
 	}
 	
-	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)bmp);
+	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)circle);
 }
 
-int main( void ) {
-	/*** Declare all variables ***/
-// 	unsigned short circle[N][N] = {BG};
- 	unsigned short circle1[N];
-	unsigned short blankBmp[N];
-	int xcenter, ycenter, x, y, i, count;
-	char str[15];
-	/*** Declare all variables ***/
+__task void readPoti_task(void){
 	
-	SystemInit();
+	while( 1 ){
+		ADCConvert();
+		//Now wiat for the other threads.
+		os_dly_wait( 100 );
+	}
+}
+
+__task void init_task( void ) {
+//int main( void ) {
+	unsigned short int potval;
+	int x, y, count;
+	
+	os_tsk_prio_self ( 2 );
+	
+	os_tsk_create ( readPoti_task, 1);
+	
 	GLCD_Init();
-	ADCInit();
 	GLCD_Clear(BG); 
 	
-	x = 160;
-	y = 120;
+	x = 160; y = 120;
 	
-	createCircle(x, y, circle1);
+	createCircle(x, y);
 	
 	count = 1;
+	
+	os_tsk_prio_self ( 1) ;
 	while(1)
 	{
-		if(count == 25000){
-			count = 0;
+// 		ADCConvert();
+ 		potval = ADCValue();
 		
-			ADCConvert();
-			//ADC_IRQHandler();
-			//while(!ADC_Done);
-			sprintf(str, "%d", ADCValue());
-			GLCD_DisplayString(1, 1, 0, str);
-			
-			//os_dly_wait( 1 );
-			
-			eraseCircle(x, y, circle1);
+		if (potval == 0)
+			potval = 1;
 		
-			x += 1;
-			y += 1;
+		if(count == 10*potval){
+			count = 1;
+			//eraseCircle(x, y);
+			x += vx; y += vy;
+			createCircle(x, y);
+		
+			if (x>= 320 - N/2 || x <= N/2)
+				vx = -1*vx;
 			
-			createCircle(x, y, circle1);
-			
-			if (x== 320 || y == 240)
-			{
-				x = 0;
-				y = 0;
-			}
+			if (y >= 240 - N/2 || y <= N/2)
+				vy = -1*vy;
 		}
-		
 		count ++;
 	}
-	
-  while(1);
 }	
+
+int main( void ) {
+	SystemInit();
+	SystemCoreClockUpdate();
+	
+	ADCInit();
+
+	os_sys_init(init_task);
+}
