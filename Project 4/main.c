@@ -173,7 +173,7 @@ int main( void ) {
 		
 			ADCConvert();
 			//ADC_IRQHandler();
-			while(!ADC_Done);
+			//while(!ADC_Done);
 			sprintf(str, "%d", ADCValue());
 			GLCD_DisplayString(1, 1, 0, str);
 			
