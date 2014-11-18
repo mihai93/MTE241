@@ -171,10 +171,13 @@ int main( void ) {
 		if(count == 25000){
 			count = 0;
 		
+			ADCConvert();
 			//ADC_IRQHandler();
-			//ADCConvert();
-			//sprintf(str, "%d", ADCValue());
-			//GLCD_DisplayString(1, 1, 0, str);
+			while(!ADC_Done);
+			sprintf(str, "%d", ADCValue());
+			GLCD_DisplayString(1, 1, 0, str);
+			
+			//os_dly_wait( 1 );
 			
 			eraseCircle(x, y, circle1);
 		
