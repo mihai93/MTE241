@@ -17,7 +17,7 @@ I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h)(0x4F58E032)
 I (GLCD.h)(0x5463B5D7)
 I (Font_6x8_h.h)(0x5463B5CC)
 I (Font_16x24_h.h)(0x5463B5D5)
-F (.\main.c)(0x546BF30F)(-c --cpu Cortex-M3 -D__RTX -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "main.o" --omf_browse "main.crf" --depend "main.d")
+F (.\main.c)(0x546C2BC9)(-c --cpu Cortex-M3 -D__RTX -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "main.o" --omf_browse "main.crf" --depend "main.d")
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdio.h)(0x4EB16D36)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdlib.h)(0x4EB16D34)
 I (C:\Software\Keil\ARM\RV31\INC\RTL.h)(0x504DDBAC)
@@ -29,6 +29,7 @@ I (C:\Software\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5059F73C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x4FDB2F0C)
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h)(0x4F58E032)
 I (GLCD.h)(0x5463B5D7)
+I (C:\Software\Keil\ARM\ARMCC\bin\..\include\time.h)(0x4EB16D32)
 F (.\Retarget.c)(0x5463B5E0)(-c --cpu Cortex-M3 -D__RTX -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -o "retarget.o" --omf_browse "retarget.crf" --depend "retarget.d")
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdio.h)(0x4EB16D36)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\rt_misc.h)(0x4EB16D30)

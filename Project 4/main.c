@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <LPC17xx.h>
 #include "GLCD.h"
+#include <time.h>
 
 #define BG	White
 #define FG	Magenta
@@ -13,16 +14,140 @@ unsigned short circle[N*N];
 
 typedef struct {
 	int x;
-	int vx;
 	int y;
+	int vx;
 	int vy;
+	int xdir;
+	int ydir;
 	int rad;
 } ball_t;
+
+ball_t ball_array[5];
+
+const unsigned char ledPosArray[8] = { 28, 29, 31, 2, 3, 4, 5, 6 };
 
 volatile unsigned short int ADC_Value;
 
 // ADC hs not been read yet.
 volatile unsigned char ADC_Done = 0; 
+
+volatile unsigned char nballs = 1;
+
+void LEDInit( void ) {
+
+	// LPC_SC is a general system-control register block, and PCONP referes
+	// to Power CONtrol for Peripherals.
+	//  - Power/clock control bit for IOCON, GPIO, and GPIO interrupts (Section 4.8.9)
+	//    This can also be enabled from `system_LPC17xx.c'
+	LPC_SC->PCONP     |= (1 << 15);            
+
+	// The ports connected to p1.28, p1.29, and p1.31 are in mode 00 which
+	// is functioning as GPIO (Section 8.5.5)
+	LPC_PINCON->PINSEL3 &= ~(0xCF00);
+
+	// The port connected to p2.2, p2.3, p2.4, p2.5, and p2.6 are in mode 00
+	// which is functioning as GPIO (Section 8.5.5)
+	LPC_PINCON->PINSEL4 &= (0xC00F);
+
+	// LPC_GPIOx is the general control register for port x (Section 9.5)
+	// FIODIR is Fast GPIO Port Direction control register. This register 
+	// individually controls the direction of each port pin (Section 9.5)
+	//
+	// Set the LEDs connected to p1.28, p1.29, and p1.31 as output
+	LPC_GPIO1->FIODIR |= 0xB0000000;           
+
+	// Set the LEDs connected to p2.2, p2.3, p2.4, p2.5, and p2.6 as output port
+	LPC_GPIO2->FIODIR |= 0x0000007C;           
+}
+
+// Turn on the LED inn a position within 0..7
+void turnOnLED( unsigned char led ) {
+	unsigned int mask = (1 << ledPosArray[led]);
+
+	// The first two LEDs are connedted to the port 28, 29 and 30
+	if ( led < 3 ) {
+		// Fast Port Output Set register controls the state of output pins.
+		// Writing 1s produces highs at the corresponding port pins. Writing 0s has no effect (Section 9.5)
+		LPC_GPIO1->FIOSET |= mask;
+	} else {
+		LPC_GPIO2->FIOSET |= mask;
+	}
+
+}
+
+// Turn off the LED in the position within 0..7
+void turnOffLED( unsigned char led ) {
+	unsigned int mask = (1 << ledPosArray[led]);
+
+	// The first two LEDs are connedted to the port 28, 29 and 30
+	if ( led < 3 ) {
+		// Fast Port Output Clear register controls the state of output pins. 
+		// Writing 1s produces lows at the corresponding port pins (Section 9.5)
+		LPC_GPIO1->FIOCLR |= mask;
+	} else {
+		LPC_GPIO2->FIOCLR |= mask;
+	}
+}
+
+void ballCount(){
+ 
+unsigned temp =  nballs;
+int numLED = 0; 
+while(temp > 0 && temp < 256)
+{
+	if((temp % 2) == 1){
+    turnOnLED(numLED);
+  }
+  else {
+    turnOffLED(numLED);
+		
+  }
+  numLED++; 
+  temp = temp / 2; 
+ }
+temp++;
+
+}
+
+
+/******************This section shows sample API to work with INT0 button******/
+
+void INT0Init( void ) {
+
+	// P2.10 is related to the INT0 or the push button.
+	// P2.10 is selected for the GPIO 
+	LPC_PINCON->PINSEL4 &= ~(3<<20); 
+
+	// P2.10 is an input port
+	LPC_GPIO2->FIODIR   &= ~(1<<10); 
+
+	// P2.10 reads the falling edges to generate the IRQ
+	// - falling edge of P2.10
+	LPC_GPIOINT->IO2IntEnF |= (1 << 10);
+
+	// IRQ is enabled in NVIC. The name is reserved and defined in `startup_LPC17xx.s'.
+	// The name is used to implemet the interrupt handler above,
+	NVIC_EnableIRQ( EINT3_IRQn );
+
+	
+}
+
+// INT0 interrupt handler
+void EINT3_IRQHandler( void ) {
+
+	
+	// Check whether the interrupt is called on the falling edge. GPIO Interrupt Status for Falling edge.
+	if ( LPC_GPIOINT->IO2IntStatF && (0x01 << 10) ) {
+		LPC_GPIOINT->IO2IntClr |= (1 << 10); // clear interrupt condition
+
+		// Do the stuff 
+		//stopBlink = stopBlink ^ 1 ;
+    nballs++;
+		//printf("%d \n", nballs);
+		ballCount();
+		
+	}
+}
 
 // Initializing the Potentiometer (ADC) ports
 void ADCInit( void ) {
@@ -88,42 +213,33 @@ unsigned short int ADCValue( void ) {
 	return ADC_Value;
 }
 
-void eraseCircle(int xc, int yc, int vx, int vy, int rad)
+void eraseCircle(ball_t *ball)
 {
 	int i, j;
 	
 	for (i = 0; i < N; i++){
 		for (j = 0; j < N; j++){
-// 			if (j < vx && vx > 0)
-// 				circle[i*N + j] = BG;
-// 			if (j > ((2*rad - 1) + vx - 1)&& vx < 0)
-// 				circle[i*N + j] = BG;
-// 			if (i > ((2*rad - 1) - vy - 1) && vy > 0)
-// 				circle[i*N + j] = BG;
-// 			if (i < abs(vy - 1) && vy < 0)
-// 				circle[i*N + j] = BG;
-			
-			//if (vx > 0 && vy > 0){
-				if ((j-rad-vx)*(j-rad-vx) + (i-rad+vy)*(i-rad+vy) <= (rad-1)*(rad-1))
+			if (j == 1 || j == N-1 || ball->x <= N || ball->y <= N)
+			{
+				circle[i*N + j] = BG;
+			} else {
+				if ((j-ball->rad-ball->vx)*(j-ball->rad-ball->vx) + (i-ball->rad+ball->vy)*(i-ball->rad+ball->vy) <= (ball->rad-2)*(ball->rad-2))
 					circle[i*N + j] = FG;
 				else
 					circle[i*N + j] = BG;
-			//}
-			if (j == 1 || j == N-1)
-					circle[i*N + j] = BG;
+			}
 		}
 	}
-	
-	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)circle);
+	GLCD_Bitmap (ball->x - ball->rad, ball->y - ball->rad, N, N, (unsigned char*)circle);
 	
 }
 
-void createCircle(int xc, int yc)
+void createCircle(ball_t *ball)
 {
 	int i, j;
 	for (i = 0; i < N; i++){
 		for (j = 0; j < N; j++){
-				if ((j-N/2)*(j-N/2) + (i-N/2)*(i-N/2) <= (N/2 -1)*(N/2 -1))
+				if ((j-N/2)*(j-N/2) + (i-N/2)*(i-N/2) <= (N/2 -2)*(N/2 -2))
 					circle[i*N + j] = FG;
 				else
 					circle[i*N + j] = BG;
@@ -133,53 +249,7 @@ void createCircle(int xc, int yc)
 		}
 	}
 	
-// 	x0 = N/2;
-// 	y0 = N/2;
-// 	radius = N/2;
-// 	f = 1 - radius;
-// 	dFx = 0;
-// 	dFy = -2 * radius;
-// 	x = 0;
-// 	y = radius-1;
-
-// 	circle[(y - radius)*N + x0] = FG;
-// 	circle[(y0 + radius)*N + x0] = FG;
-// 	circle[y0*N + (x - radius)] = FG;
-// 	circle[y0*N + (x0 - radius)] = FG;
-// 	
-// 	for(i=0;(x0-radius+i) <= (x0+radius);i++)
-// 		circle[y0*N + (x0-radius+i)] = FG;
-
-// 	while(x < y){
-// 		if(f >= 0){
-// 			y--;
-// 			dFy += 2;
-// 			f += dFy;
-// 		}
-// 		
-// 		x++;
-// 		dFx += 2;
-// 		f += dFx + 1;
-// 		
-// 		for(i=0;(x0-x+i) <= (x0+x);i++)
-// 			circle[(y0 + y)*N + (x0-x+i)] = FG;
-// 		
-// 		for(i=0;(x0-x+i) <= (x0+x);i++)
-// 			circle[(y0 - y)*N + (x0-x+i)] = FG;
-// 		
-// 		for(i=0;(x0-y+i) <= (x0+y);i++)
-// 			circle[(y0 + x)*N + (x0-y+i)] = FG;
-// 		
-// 		for(i=0;(x0-y+i) <= (x0+y);i++)
-// 			circle[(y0 - x)*N + (x0-y+i)] = FG;
-// 	}
-// 	
-// 	for (i = 0; i < N*N; i++){
-// 		if (circle[i] != FG)
-// 			circle[i] = BG;
-// 	}
-	
-	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)circle);
+	GLCD_Bitmap (ball->x - ball->rad, ball->y - ball->rad, N, N, (unsigned char*)circle);
 }
 
 __task void readPoti_task(void){
@@ -187,15 +257,13 @@ __task void readPoti_task(void){
 	while( 1 ){
 		ADCConvert();
 		//Now wiat for the other threads.
-		os_dly_wait( 100 );
+		os_dly_wait( 500 );
 	}
 }
 
 __task void init_task( void ) {
-//int main( void ) {
-	unsigned short int potval;
+	unsigned short int pot;
 	int x, y, count;
-	ball_t ball;
 	
 	os_tsk_prio_self ( 2 );
 	
@@ -204,53 +272,46 @@ __task void init_task( void ) {
 	GLCD_Init();
 	GLCD_Clear(BG); 
 	
-	ball.x = 160; ball.y = 120;
-	ball.vx = 5; ball.vy = 5;
-	ball.rad = 15;
+	ball_array[0].x = (int)(srand(os_time_get())%320); ball_array[0].y = rand()%240;
+	ball_array[0].xdir = 1; ball_array[0].ydir = 1;
+	ball_array[0].rad = N/2;
 	
-	createCircle(ball.x, ball.y);
-	
-	//count = 1;
+	ball_array[1].x = 100; ball_array[1].y = 50;
+	ball_array[1].xdir = 1; ball_array[1].ydir = 1;
+	ball_array[1].rad = N/2;
 	
 	os_tsk_prio_self ( 1) ;
+	
+	nballs = 1;
+	count = 0;
 	while(1)
 	{
-		//os_dly_wait(1000);
- 		potval = ADCValue();
+		ball_t *ball;
 		
-		if (potval == 0)
-			potval = 1;
+		if (count == nballs)
+			count = 0;
 		
-// 	if(count == 10){
-// 		count = 1;
-		//os_dly_wait(1000);
-		createCircle(ball.x, ball.y);
-		//os_dly_wait(1000);
-		eraseCircle(ball.x, ball.y, ball.vx*potval/250, ball.vy*potval/250, ball.rad);
-		//os_dly_wait(1000);
+		ball = ball_array + count;
+		
+ 		pot = ADCValue()/750;
+		
+		createCircle(ball);
+		
+		if (ball->x >= 320 - N/2 || ball->x <= N/2)
+			ball->xdir = -1*ball->xdir;
+		
+		if (ball->y >= 240 - N/2 || ball->y <= N/2)
+			ball->ydir = -1*ball->ydir;
 
+		ball->vx = ball->xdir*pot;
+		ball->vy = ball->ydir*pot;
 		
-		ball.x += ball.vx*potval/250; 
-		ball.y += ball.vy*potval/250;
+		eraseCircle(ball);
+
+		ball->x += ball->vx; 
+		ball->y += ball->vy;
 		
-		
-		if (ball.x > 320)
-			ball.x = 320 - N/2;
-		else if (ball.x < 0)
-			ball.x = N/2;
-		
-		if (ball.y > 240)
-			ball.y = 240 - N/2;
-		else if (ball.y < 0)
-			ball.y = N/2;
-		
-		if (ball.x >= 320 - N/2 || ball.x <= N/2)
-			ball.vx = -1*ball.vx;
-		
-		if (ball.y >= 240 - N/2 || ball.y <= N/2)
-			ball.vy = -1*ball.vy;
-// 		}
-		//count ++;
+		count++;
 	}
 }	
 
@@ -259,6 +320,8 @@ int main( void ) {
 	SystemCoreClockUpdate();
 	
 	ADCInit();
+	LEDInit();
+ 	INT0Init();
 
 	os_sys_init(init_task);
 }
