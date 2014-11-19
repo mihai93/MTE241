@@ -3,11 +3,11 @@
 <title>Static Call Graph - [N:\MTE241\Project 4\project4.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image N:\MTE241\Project 4\project4.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Tue Nov 18 00:08:55 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Tue Nov 18 20:32:05 2014
 <BR><P>
-<H3>Maximum Stack Usage =        152 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        160 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-init_task &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+init_task &rArr; eraseCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 <P>
 <H3>
 Functions with no stack information
@@ -573,12 +573,16 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
-<P><STRONG><a name="[71]"></a>eraseCircle</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, main.o(.text), UNUSED)
-<BR><BR>[Calls]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Bitmap
+<P><STRONG><a name="[71]"></a>eraseCircle</STRONG> (Thumb, 150 bytes, Stack size 40 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 136<LI>Call Chain = eraseCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+</UL>
+<BR>[Calls]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Bitmap
+</UL>
+<BR>[Called By]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
-<P><STRONG><a name="[72]"></a>createCircle</STRONG> (Thumb, 462 bytes, Stack size 56 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+<P><STRONG><a name="[72]"></a>createCircle</STRONG> (Thumb, 132 bytes, Stack size 24 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Bitmap
 </UL>
@@ -590,10 +594,11 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[75]"></a>init_task</STRONG> (Thumb, 148 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 152<LI>Call Chain = init_task &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+<P><STRONG><a name="[75]"></a>init_task</STRONG> (Thumb, 250 bytes, Stack size 24 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 160<LI>Call Chain = init_task &rArr; eraseCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 </UL>
 <BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;createCircle
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eraseCircle
 <LI><a href="#[76]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCValue
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Clear
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Init

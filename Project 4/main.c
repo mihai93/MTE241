@@ -7,11 +7,17 @@
 
 #define BG	White
 #define FG	Magenta
-#define N 50
+#define N 30
 
 unsigned short circle[N*N];
-int vx = 1;
-int vy = 1;
+
+typedef struct {
+	int x;
+	int vx;
+	int y;
+	int vy;
+	int rad;
+} ball_t;
 
 volatile unsigned short int ADC_Value;
 
@@ -82,12 +88,31 @@ unsigned short int ADCValue( void ) {
 	return ADC_Value;
 }
 
-void eraseCircle(int xc, int yc)
+void eraseCircle(int xc, int yc, int vx, int vy, int rad)
 {
-	int i;
+	int i, j;
 	
-	for (i = 0; i < N*N; i++)
-			circle[i] = BG;
+	for (i = 0; i < N; i++){
+		for (j = 0; j < N; j++){
+// 			if (j < vx && vx > 0)
+// 				circle[i*N + j] = BG;
+// 			if (j > ((2*rad - 1) + vx - 1)&& vx < 0)
+// 				circle[i*N + j] = BG;
+// 			if (i > ((2*rad - 1) - vy - 1) && vy > 0)
+// 				circle[i*N + j] = BG;
+// 			if (i < abs(vy - 1) && vy < 0)
+// 				circle[i*N + j] = BG;
+			
+			//if (vx > 0 && vy > 0){
+				if ((j-rad-vx)*(j-rad-vx) + (i-rad+vy)*(i-rad+vy) <= (rad-1)*(rad-1))
+					circle[i*N + j] = FG;
+				else
+					circle[i*N + j] = BG;
+			//}
+			if (j == 1 || j == N-1)
+					circle[i*N + j] = BG;
+		}
+	}
 	
 	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)circle);
 	
@@ -95,53 +120,64 @@ void eraseCircle(int xc, int yc)
 
 void createCircle(int xc, int yc)
 {
-	int i, x0, y0, f, dFx, dFy, x, y, radius;
-	
-	x0 = N/2;
-	y0 = N/2;
-	radius = N/2 - 4;
-	f = 1 - radius;
-	dFx = 0;
-	dFy = -2 * radius;
-	x = 0;
-	y = radius-1;
-
-	circle[(y - radius)*N + x0] = FG;
-	circle[(y0 + radius)*N + x0] = FG;
-	circle[y0*N + (x - radius)] = FG;
-	circle[y0*N + (x0 - radius)] = FG;
-	
-	for(i=0;(x0-radius+i) <= (x0+radius);i++)
-		circle[y0*N + (x0-radius+i)] = FG;
-
-	while(x < y){
-		if(f >= 0){
-			y--;
-			dFy += 2;
-			f += dFy;
+	int i, j;
+	for (i = 0; i < N; i++){
+		for (j = 0; j < N; j++){
+				if ((j-N/2)*(j-N/2) + (i-N/2)*(i-N/2) <= (N/2 -1)*(N/2 -1))
+					circle[i*N + j] = FG;
+				else
+					circle[i*N + j] = BG;
+				
+				if (j == 1 || j == N-1)
+					circle[i*N + j] = BG;
 		}
-		
-		x++;
-		dFx += 2;
-		f += dFx + 1;
-		
-		for(i=0;(x0-x+i) <= (x0+x);i++)
-			circle[(y0 + y)*N + (x0-x+i)] = FG;
-		
-		for(i=0;(x0-x+i) <= (x0+x);i++)
-			circle[(y0 - y)*N + (x0-x+i)] = FG;
-		
-		for(i=0;(x0-y+i) <= (x0+y);i++)
-			circle[(y0 + x)*N + (x0-y+i)] = FG;
-		
-		for(i=0;(x0-y+i) <= (x0+y);i++)
-			circle[(y0 - x)*N + (x0-y+i)] = FG;
 	}
 	
-	for (i = 0; i < N*N; i++){
-		if (circle[i] != FG)
-			circle[i] = BG;
-	}
+// 	x0 = N/2;
+// 	y0 = N/2;
+// 	radius = N/2;
+// 	f = 1 - radius;
+// 	dFx = 0;
+// 	dFy = -2 * radius;
+// 	x = 0;
+// 	y = radius-1;
+
+// 	circle[(y - radius)*N + x0] = FG;
+// 	circle[(y0 + radius)*N + x0] = FG;
+// 	circle[y0*N + (x - radius)] = FG;
+// 	circle[y0*N + (x0 - radius)] = FG;
+// 	
+// 	for(i=0;(x0-radius+i) <= (x0+radius);i++)
+// 		circle[y0*N + (x0-radius+i)] = FG;
+
+// 	while(x < y){
+// 		if(f >= 0){
+// 			y--;
+// 			dFy += 2;
+// 			f += dFy;
+// 		}
+// 		
+// 		x++;
+// 		dFx += 2;
+// 		f += dFx + 1;
+// 		
+// 		for(i=0;(x0-x+i) <= (x0+x);i++)
+// 			circle[(y0 + y)*N + (x0-x+i)] = FG;
+// 		
+// 		for(i=0;(x0-x+i) <= (x0+x);i++)
+// 			circle[(y0 - y)*N + (x0-x+i)] = FG;
+// 		
+// 		for(i=0;(x0-y+i) <= (x0+y);i++)
+// 			circle[(y0 + x)*N + (x0-y+i)] = FG;
+// 		
+// 		for(i=0;(x0-y+i) <= (x0+y);i++)
+// 			circle[(y0 - x)*N + (x0-y+i)] = FG;
+// 	}
+// 	
+// 	for (i = 0; i < N*N; i++){
+// 		if (circle[i] != FG)
+// 			circle[i] = BG;
+// 	}
 	
 	GLCD_Bitmap (xc - N/2, yc - N/2, N, N, (unsigned char*)circle);
 }
@@ -159,6 +195,7 @@ __task void init_task( void ) {
 //int main( void ) {
 	unsigned short int potval;
 	int x, y, count;
+	ball_t ball;
 	
 	os_tsk_prio_self ( 2 );
 	
@@ -167,34 +204,53 @@ __task void init_task( void ) {
 	GLCD_Init();
 	GLCD_Clear(BG); 
 	
-	x = 160; y = 120;
+	ball.x = 160; ball.y = 120;
+	ball.vx = 5; ball.vy = 5;
+	ball.rad = 15;
 	
-	createCircle(x, y);
+	createCircle(ball.x, ball.y);
 	
-	count = 1;
+	//count = 1;
 	
 	os_tsk_prio_self ( 1) ;
 	while(1)
 	{
-// 		ADCConvert();
+		//os_dly_wait(1000);
  		potval = ADCValue();
 		
 		if (potval == 0)
 			potval = 1;
 		
-		if(count == 10*potval){
-			count = 1;
-			//eraseCircle(x, y);
-			x += vx; y += vy;
-			createCircle(x, y);
+// 	if(count == 10){
+// 		count = 1;
+		//os_dly_wait(1000);
+		createCircle(ball.x, ball.y);
+		//os_dly_wait(1000);
+		eraseCircle(ball.x, ball.y, ball.vx*potval/250, ball.vy*potval/250, ball.rad);
+		//os_dly_wait(1000);
+
 		
-			if (x>= 320 - N/2 || x <= N/2)
-				vx = -1*vx;
-			
-			if (y >= 240 - N/2 || y <= N/2)
-				vy = -1*vy;
-		}
-		count ++;
+		ball.x += ball.vx*potval/250; 
+		ball.y += ball.vy*potval/250;
+		
+		
+		if (ball.x > 320)
+			ball.x = 320 - N/2;
+		else if (ball.x < 0)
+			ball.x = N/2;
+		
+		if (ball.y > 240)
+			ball.y = 240 - N/2;
+		else if (ball.y < 0)
+			ball.y = N/2;
+		
+		if (ball.x >= 320 - N/2 || ball.x <= N/2)
+			ball.vx = -1*ball.vx;
+		
+		if (ball.y >= 240 - N/2 || ball.y <= N/2)
+			ball.vy = -1*ball.vy;
+// 		}
+		//count ++;
 	}
 }	
 
