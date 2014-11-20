@@ -3,11 +3,11 @@
 <title>Static Call Graph - [N:\MTE241\Project 4\project4.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image N:\MTE241\Project 4\project4.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Wed Nov 19 00:27:10 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.02 [Build 28]: Last Updated: Wed Nov 19 19:53:11 2014
 <BR><P>
-<H3>Maximum Stack Usage =        120 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        104 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
-init_task &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+init_task &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 <P>
 <H3>
 Functions with no stack information
@@ -78,9 +78,9 @@ Function Pointers
  <LI><a href="#[9]">UsageFault_Handler</a> from startup_lpc17xx.o(.text) referenced from startup_lpc17xx.o(RESET)
  <LI><a href="#[e]">WDT_IRQHandler</a> from startup_lpc17xx.o(.text) referenced from startup_lpc17xx.o(RESET)
  <LI><a href="#[3c]">__main</a> from __main.o(!!!main) referenced from startup_lpc17xx.o(.text)
- <LI><a href="#[7d]">init_task</a> from main.o(.text) referenced from main.o(.text)
+ <LI><a href="#[7b]">init_task</a> from main.o(.text) referenced from main.o(.text)
  <LI><a href="#[3b]">os_idle_demon</a> from rtx_conf_cm.o(.text) referenced from rt_task.o(i.rt_sys_init)
- <LI><a href="#[7b]">readPoti_task</a> from main.o(.text) referenced from main.o(.text)
+ <LI><a href="#[79]">readPoti_task</a> from main.o(.text) referenced from main.o(.text)
  <LI><a href="#[31]">rt_alloc_box</a> from rt_membox.o(i.rt_alloc_box) referenced from hal_cm3.o(.emb_text)
  <LI><a href="#[35]">rt_dly_wait</a> from rt_time.o(i.rt_dly_wait) referenced from main.o(.text)
  <LI><a href="#[32]">rt_free_box</a> from rt_membox.o(i.rt_free_box) referenced from hal_cm3.o(.emb_text)
@@ -269,8 +269,8 @@ Global Symbols
 <LI><a href="#[58]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_tick_irqack
 </UL>
 
-<P><STRONG><a name="[7e]"></a>rand</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, rand.o(.emb_text))
-<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
+<P><STRONG><a name="[7c]"></a>rand</STRONG> (Thumb, 48 bytes, Stack size 0 bytes, rand.o(.emb_text))
+<BR><BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
 <P><STRONG><a name="[d8]"></a>__user_libspace</STRONG> (Thumb, 8 bytes, Stack size 0 bytes, libspace.o(.text), UNUSED)
@@ -453,7 +453,7 @@ Global Symbols
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_scroll
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
 <P><STRONG><a name="[64]"></a>GLCD_SetWindow</STRONG> (Thumb, 168 bytes, Stack size 32 bytes, glcd_spi_lpc1700.o(.text))
@@ -501,7 +501,7 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;refresh_lcd
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_scroll
-<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
+<LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
 <P><STRONG><a name="[6b]"></a>GLCD_DrawChar</STRONG> (Thumb, 150 bytes, Stack size 56 bytes, glcd_spi_lpc1700.o(.text), UNUSED)
@@ -550,8 +550,7 @@ Global Symbols
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wr_dat_start
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wr_cmd
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;createCircle
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eraseCircle
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
 <P><STRONG><a name="[d9]"></a>GLCD_ScrollVertical</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, glcd_spi_lpc1700.o(.text), UNUSED)
@@ -576,7 +575,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ballCount
 </UL>
 
-<P><STRONG><a name="[73]"></a>ballCount</STRONG> (Thumb, 44 bytes, Stack size 12 bytes, main.o(.text))
+<P><STRONG><a name="[73]"></a>ballCount</STRONG> (Thumb, 84 bytes, Stack size 12 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = ballCount
 </UL>
 <BR>[Calls]<UL><LI><a href="#[75]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;turnOffLED
@@ -608,51 +607,48 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[4e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[7c]"></a>ADCConvert</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readPoti_task
+<P><STRONG><a name="[7a]"></a>ADCConvert</STRONG> (Thumb, 32 bytes, Stack size 0 bytes, main.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;readPoti_task
 </UL>
 
 <P><STRONG><a name="[24]"></a>ADC_IRQHandler</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, main.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_lpc17xx.o(RESET)
 </UL>
-<P><STRONG><a name="[7f]"></a>ADCValue</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
+<P><STRONG><a name="[7d]"></a>ADCValue</STRONG> (Thumb, 16 bytes, Stack size 0 bytes, main.o(.text))
+<BR><BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
-<P><STRONG><a name="[79]"></a>eraseCircle</STRONG> (Thumb, 166 bytes, Stack size 24 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = eraseCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+<P><STRONG><a name="[7f]"></a>eraseCircle</STRONG> (Thumb, 106 bytes, Stack size 20 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = eraseCircle
 </UL>
-<BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Bitmap
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
-<P><STRONG><a name="[7a]"></a>createCircle</STRONG> (Thumb, 132 bytes, Stack size 24 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+<P><STRONG><a name="[7e]"></a>createCircle</STRONG> (Thumb, 88 bytes, Stack size 12 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = createCircle
 </UL>
-<BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Bitmap
-</UL>
-<BR>[Called By]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
+<BR>[Called By]<UL><LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;init_task
 </UL>
 
-<P><STRONG><a name="[7b]"></a>readPoti_task</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCConvert
+<P><STRONG><a name="[79]"></a>readPoti_task</STRONG> (Thumb, 18 bytes, Stack size 0 bytes, main.o(.text))
+<BR><BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCConvert
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[7d]"></a>init_task</STRONG> (Thumb, 230 bytes, Stack size 0 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = init_task &rArr; createCircle &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
+<P><STRONG><a name="[7b]"></a>init_task</STRONG> (Thumb, 478 bytes, Stack size 8 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = init_task &rArr; GLCD_Bitmap &rArr; GLCD_SetWindow &rArr; wr_reg &rArr; wr_dat
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;createCircle
-<LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eraseCircle
-<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCValue
+<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;createCircle
+<LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;eraseCircle
+<LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ADCValue
+<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Bitmap
 <LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Clear
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GLCD_Init
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;rand
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(.text)
 </UL>
-<P><STRONG><a name="[4e]"></a>main</STRONG> (Thumb, 130 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[4e]"></a>main</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = main &rArr; SystemCoreClockUpdate &rArr; __aeabi_uldivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;os_set_env

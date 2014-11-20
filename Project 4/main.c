@@ -6,11 +6,15 @@
 #include "GLCD.h"
 #include <time.h>
 
-#define BG	White
-#define FG	Magenta
-#define N 30
+#define BG 0xFFFF
+#define FG	0xF81F
+#define N 45
+#define MAX_BALLS	5
+#define maxRadius	45
 
+unsigned short colours[]	= {0xF81F, 0x07E0, 0xF800, 0xFFE0, 0x001F};
 unsigned short circle[N*N];
+unsigned short circle2[N*N];
 
 typedef struct {
 	int x;
@@ -20,9 +24,10 @@ typedef struct {
 	int xdir;
 	int ydir;
 	int rad;
+	unsigned short colour;
 } ball_t;
 
-ball_t ball_array[5];
+ball_t ball_array[MAX_BALLS];
 
 const unsigned char ledPosArray[8] = { 28, 29, 31, 2, 3, 4, 5, 6 };
 
@@ -31,7 +36,8 @@ volatile unsigned short int ADC_Value;
 // ADC hs not been read yet.
 volatile unsigned char ADC_Done = 0; 
 
-volatile unsigned char nballs = 1;
+volatile unsigned char nballs = 0;
+int createBall = 0;
 
 void LEDInit( void ) {
 
@@ -90,23 +96,30 @@ void turnOffLED( unsigned char led ) {
 }
 
 void ballCount(){
- 
-unsigned temp =  nballs;
+unsigned temp;
 int numLED = 0; 
-while(temp > 0 && temp < 256)
-{
-	if((temp % 2) == 1){
-    turnOnLED(numLED);
-  }
-  else {
-    turnOffLED(numLED);
+	if (createBall > 0 && nballs < MAX_BALLS)
+	{
+		if (createBall == 1)
+			nballs++;
 		
-  }
-  numLED++; 
-  temp = temp / 2; 
- }
-temp++;
+		temp = nballs;
 
+		while(temp > 0 && temp < 256)
+		{
+			if((temp % 2) == 1){
+				turnOnLED(numLED);
+			}
+			else {
+				turnOffLED(numLED);
+			}
+			
+			numLED++; 
+			temp = temp / 2; 
+		 }
+		temp++;
+		createBall = 0;
+	}
 }
 
 
@@ -142,8 +155,9 @@ void EINT3_IRQHandler( void ) {
 
 		// Do the stuff 
 		//stopBlink = stopBlink ^ 1 ;
-    nballs++;
+		//nballs++;
 		//printf("%d \n", nballs);
+		createBall += 1;
 		ballCount();
 		
 	}
@@ -215,23 +229,20 @@ unsigned short int ADCValue( void ) {
 
 void eraseCircle(ball_t *ball)
 {
-	int i, j;
+	int i, j, xsq, ysq, rsq;
 	
 	for (i = 0; i < N; i++){
 		for (j = 0; j < N; j++){
-			if (j == 1 || j == N-1 || ball->x <= N || ball->y <= N)
-			{
-				circle[i*N + j] = BG;
-			} else {
-				if ((j-ball->rad-ball->vx)*(j-ball->rad-ball->vx) + (i-ball->rad+ball->vy)*(i-ball->rad+ball->vy) <= (ball->rad-2)*(ball->rad-2))
-					circle[i*N + j] = FG;
-				else
-					circle[i*N + j] = BG;
-			}
+			xsq = (j-ball->rad-ball->vx)*(j-ball->rad-ball->vx);
+			ysq = (i-ball->rad+ball->vy)*(i-ball->rad+ball->vy);
+			rsq = (ball->rad-2)*(ball->rad-2);
+			
+			if (xsq + ysq <= rsq)
+				circle2[i*N + j] = ball->colour;
+			else
+				circle2[i*N + j] = BG;
 		}
 	}
-	GLCD_Bitmap (ball->x - ball->rad, ball->y - ball->rad, N, N, (unsigned char*)circle);
-	
 }
 
 void createCircle(ball_t *ball)
@@ -239,17 +250,13 @@ void createCircle(ball_t *ball)
 	int i, j;
 	for (i = 0; i < N; i++){
 		for (j = 0; j < N; j++){
-				if ((j-N/2)*(j-N/2) + (i-N/2)*(i-N/2) <= (N/2 -2)*(N/2 -2))
-					circle[i*N + j] = FG;
-				else
-					circle[i*N + j] = BG;
-				
-				if (j == 1 || j == N-1)
-					circle[i*N + j] = BG;
+			if ((j-N/2)*(j-N/2) + (i-N/2)*(i-N/2) <= (N/2 -2)*(N/2 -2))
+				circle[i*N + j] = ball->colour;
+			else
+				circle[i*N + j] = BG;
+			
 		}
 	}
-	
-	GLCD_Bitmap (ball->x - ball->rad, ball->y - ball->rad, N, N, (unsigned char*)circle);
 }
 
 __task void readPoti_task(void){
@@ -263,7 +270,7 @@ __task void readPoti_task(void){
 
 __task void init_task( void ) {
 	unsigned short int pot;
-	int x, y, count;
+	int i, x, y, count;
 	
 	os_tsk_prio_self ( 2 );
 	
@@ -272,46 +279,60 @@ __task void init_task( void ) {
 	GLCD_Init();
 	GLCD_Clear(BG); 
 	
-	ball_array[0].x = (int)(srand(os_time_get())%320); ball_array[0].y = rand()%240;
-	ball_array[0].xdir = 1; ball_array[0].ydir = 1;
-	ball_array[0].rad = N/2;
-	
-	ball_array[1].x = 100; ball_array[1].y = 50;
-	ball_array[1].xdir = 1; ball_array[1].ydir = 1;
-	ball_array[1].rad = N/2;
+	for(i = 0; i < MAX_BALLS; i++)
+	{
+		ball_array[i].x = i*(320/MAX_BALLS); ball_array[i].y = i*(240/MAX_BALLS);
+		ball_array[i].xdir = (rand()%2)*2 - 1; ball_array[i].ydir = (rand()%2)*2 - 1;
+		ball_array[i].rad = N/2;
+		ball_array[i].colour = colours[i];
+	}
 	
 	os_tsk_prio_self ( 1) ;
 	
-	nballs = 1;
+	nballs = 0;
 	count = 0;
 	while(1)
 	{
-		ball_t *ball;
-		
-		if (count == nballs)
-			count = 0;
-		
-		ball = ball_array + count;
-		
- 		pot = ADCValue()/750;
-		
-		createCircle(ball);
-		
-		if (ball->x >= 320 - N/2 || ball->x <= N/2)
-			ball->xdir = -1*ball->xdir;
-		
-		if (ball->y >= 240 - N/2 || ball->y <= N/2)
-			ball->ydir = -1*ball->ydir;
+		for (i = 0; i < nballs; i++)
+		{
+			ball_t *ball;
+			
+			if (count == nballs)
+				count = 0;
+			
+			ball = ball_array + count;
+			
+			pot = ADCValue()/850;
+			
+			createCircle(ball);
+			
+			if (ball->x >= 320 - N/2)
+				ball->xdir = -1*ball->xdir;
+			else if (ball->x < N/2){
+				ball->xdir = -1*ball->xdir;
+				ball->x = N/2;
+			}
+			
+			if (ball->y >= 240 - N/2)
+				ball->ydir = -1*ball->ydir;
+			else if (ball->y < N/2){
+				ball->ydir = -1*ball->ydir;
+				ball->y = N/2;
+			}
 
-		ball->vx = ball->xdir*pot;
-		ball->vy = ball->ydir*pot;
-		
-		eraseCircle(ball);
+			ball->vx = ball->xdir*pot;
+			ball->vy = ball->ydir*pot;
+			
+			eraseCircle(ball);
+			
+			GLCD_Bitmap (ball->x+ball->vx - ball->rad, ball->y+ball->vy - ball->rad, N, N, (unsigned char*)circle);
+			GLCD_Bitmap (ball->x - ball->rad, ball->y - ball->rad, N, N, (unsigned char*)circle2);
 
-		ball->x += ball->vx; 
-		ball->y += ball->vy;
-		
-		count++;
+			ball->x += ball->vx; 
+			ball->y += ball->vy;
+			
+			count++;
+		}
 	}
 }	
 
