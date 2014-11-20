@@ -5,6 +5,7 @@
 #include <LPC17xx.h>
 #include "GLCD.h"
 #include <time.h>
+#include <math.h>
 
 #define BG 0xFFFF
 #define FG	0xF81F
@@ -291,13 +292,100 @@ int colliding(ball_t *ball, int j)
 
 void trajectory(ball_t *ball, int j)
 {
-	int d, xd, yd, xtd, ytd;
+	int d, xd, yd, xtd, ytd, v, vx1, vy1, vx2, vy2, 
+			vxn, vyn, i, ix, iy, im1, im2, impulse, mtd;
+	
+	vx1 = ball->vx*ball->xdir;
+	vy1 = ball->vy*ball->ydir;
+	vx2 = ball->vx*ball->xdir;
+	vy2 = ball->vy*ball->ydir;
 	
 	xd = (ball->x + ball->rad/2) - (ball_array[j].x + ball_array[j].rad/2);
 	yd = (ball->y + ball->rad/2) - (ball_array[j].y + ball_array[j].rad/2);
 	d = sqrt((xd*xd) + (yd*yd));
 	xtd = xd*((ball->rad + ball_array[j].rad-d)/d);
 	ytd = yd*((ball->rad + ball_array[j].rad-d)/d);
+	mtd = sqrt((xtd*xtd)+(ytd*ytd));
+	
+	im1 = 1/ball->rad;
+	im2 = 1/ball_array[j].rad;
+	
+	ball->x += xtd*(im1/(im1+im2));
+	ball->y += ytd*(im1/(im1+im2));
+	
+	ball_array[j].x -= xtd*(im2/(im1+im2));
+	ball_array[j].y -= ytd*(im2/(im1+im2));
+	
+	vx1 -= vx2;
+	vy1 -= vy2;
+	
+	if (vx1 < 0)
+	{
+		ball->vx = vx1*-1;
+		ball->xdir = -1;
+	}
+	
+	if (vy1 < 0)
+	{
+		ball->vy = -1*vy1;
+		ball->ydir = -1;
+	}
+	
+	if (vx2 < 0)
+	{
+		ball_array[j].vx = -1*vx2;
+		ball_array[j].xdir = -1;
+	}
+	
+	if (vy2 < 0)
+	{
+		ball_array[j].vy = -1*vy2;
+		ball_array[j].ydir = -1;
+	}
+	
+	v = sqrt((vx1*vx1)+(vy1*vy1));
+	vxn = vx1/v;
+	vyn = vy1/v;
+	
+	if (vxn + vyn > 0) return;
+	
+	ix = vxn/(im1+im2);
+	iy = vyn/(im1+im2);
+	i = sqrt((ix*ix)+(iy*iy));
+	
+	ix *= mtd;
+	iy *= mtd;
+	
+	impulse = 10*sqrt((ix*ix)+(iy*iy));
+	
+	vx1 += impulse*im1;
+	vy1 += impulse*im1;
+	vx2 -= impulse*im2;
+	vy2 -= impulse*im2;
+	
+	if (vx1 < 0)
+	{
+		ball->vx = vx1*-1;
+		ball->xdir = -1;
+	}
+	
+	if (vy1 < 0)
+	{
+		ball->vy = -1*vy1;
+		ball->ydir = -1;
+	}
+	
+	if (vx2 < 0)
+	{
+		ball_array[j].vx = -1*vx2;
+		ball_array[j].xdir = -1;
+	}
+	
+	if (vy2 < 0)
+	{
+		ball_array[j].vy = -1*vy2;
+		ball_array[j].ydir = -1;
+	}
 	
 }
 
@@ -358,7 +446,9 @@ __task void init_task( void ) {
 			{
 				if (colliding(ball, j))
 				{
-					ball->xdir = -1*ball_array[j].xdir;
+					trajectory(ball, j);
+// 					ball->xdir = ball_array[j].xdir;
+// 					ball_array[j].xdir = -1*ball_array[j].xdir;
 					
 // 					printf("Col#: %i : %i with %i\n",numCol,i,j);
 // 					numCol += 1;
