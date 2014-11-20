@@ -5,16 +5,17 @@
 #include <LPC17xx.h>
 #include "GLCD.h"
 #include <time.h>
+#include "uart.h"
 
 #define BG 0xFFFF
 #define FG	0xF81F
-#define N 45
+#define MAX_DIAM 50
 #define MAX_BALLS	5
-#define maxRadius	45
 
-unsigned short colours[]	= {0xF81F, 0x07E0, 0xF800, 0xFFE0, 0x001F};
-unsigned short circle[N*N];
-unsigned short circle2[N*N];
+unsigned short colours[MAX_BALLS]	= {0xF81F, 0x07E0, 0xF800, 0x03EF, 0x001F};
+unsigned short radii[MAX_BALLS] = {22.5, 15, 10, 25, 17.5};
+unsigned short circle[MAX_DIAM*MAX_DIAM];
+unsigned short circle2[MAX_DIAM*MAX_DIAM];
 
 typedef struct {
 	int x;
@@ -37,6 +38,7 @@ volatile unsigned short int ADC_Value;
 volatile unsigned char ADC_Done = 0; 
 
 volatile unsigned char nballs = 0;
+
 int createBall = 0;
 
 void LEDInit( void ) {
@@ -231,16 +233,16 @@ void eraseCircle(ball_t *ball)
 {
 	int i, j, xsq, ysq, rsq;
 	
-	for (i = 0; i < N; i++){
-		for (j = 0; j < N; j++){
+	for (i = 0; i < 2*ball->rad; i++){
+		for (j = 0; j < 2*ball->rad; j++){
 			xsq = (j-ball->rad-ball->vx)*(j-ball->rad-ball->vx);
 			ysq = (i-ball->rad+ball->vy)*(i-ball->rad+ball->vy);
 			rsq = (ball->rad-2)*(ball->rad-2);
 			
 			if (xsq + ysq <= rsq)
-				circle2[i*N + j] = ball->colour;
+				circle2[i*2*ball->rad + j] = ball->colour;
 			else
-				circle2[i*N + j] = BG;
+				circle2[i*2*ball->rad + j] = BG;
 		}
 	}
 }
@@ -248,12 +250,12 @@ void eraseCircle(ball_t *ball)
 void createCircle(ball_t *ball)
 {
 	int i, j;
-	for (i = 0; i < N; i++){
-		for (j = 0; j < N; j++){
-			if ((j-N/2)*(j-N/2) + (i-N/2)*(i-N/2) <= (N/2 -2)*(N/2 -2))
-				circle[i*N + j] = ball->colour;
+	for (i = 0; i < 2*ball->rad; i++){
+		for (j = 0; j < 2*ball->rad; j++){
+			if ((j-ball->rad)*(j-ball->rad) + (i-ball->rad)*(i-ball->rad) <= (ball->rad -2)*(ball->rad -2))
+				circle[i*2*ball->rad + j] = ball->colour;
 			else
-				circle[i*N + j] = BG;
+				circle[i*2*ball->rad + j] = BG;
 			
 		}
 	}
@@ -268,9 +270,69 @@ __task void readPoti_task(void){
 	}
 }
 
+int colliding(ball_t *ball, int j)
+{
+	int xd, yd, radSum, radSqr, distSqr;
+	
+	xd = ball->x - ball_array[j].x;
+	yd = ball->x - ball_array[j].x;
+	
+	radSum = ball->rad + ball_array[j].rad;
+	radSqr = radSum * radSum;
+	
+	distSqr = (xd*xd) + (yd*yd);
+	
+	if (distSqr <= radSqr)
+	{
+		return 1;
+	}
+	
+	return 0;
+}
+
+void trajectory(int i, int j)
+{
+	int x, y, m, m1, m2, vx, vy, vdx, vdy, fy, sign, a, dvx, R;
+	R = 0;
+	
+	m1 = ball_array[i].rad;
+	m2 = ball_array[j].rad;
+	m = m2/m1;
+	
+	x = ball_array[j].x - ball_array[i].x;
+	y = ball_array[j].y - ball_array[i].y;
+	vx = ball_array[j].vx - ball_array[i].vx;
+	vy = ball_array[j].vy - ball_array[i].vy;
+	
+	vdx = (m1*ball_array[i].vx*m2*ball_array[j].vx)/(m1+m2);
+	vdy = (m1*ball_array[i].vy*m2*ball_array[j].vy)/(m1+m2);
+	
+	if((vx*x + vy*y) >= 0)
+		return;
+	
+	fy = 1.0e-12*abs(y);
+	if (abs(x) < fy)
+	{
+		sign = x < 0 ? -1 : 1;
+		x = fy*sign;
+	}
+	
+	a = y/x;
+	dvx = -2*(vx + a*vy)/(1+a*a)*(1+m);
+	ball_array[j].vx += dvx;
+	ball_array[j].vy += a*dvx;
+	ball_array[i].vx -= m*dvx;
+	ball_array[i].vy -= a*m*dvx;
+	
+	ball_array[i].vx = (ball_array[i].vx - vdx)*R + vdx;
+	ball_array[i].vy = (ball_array[i].vy - vdy)*R + vdy;
+	ball_array[j].vx = (ball_array[j].vx - vdx)*R + vdx;
+	ball_array[j].vy = (ball_array[j].vy - vdy)*R + vdy;
+}
+
 __task void init_task( void ) {
 	unsigned short int pot;
-	int i, x, y, count;
+	int i, j, x, y, count;
 	
 	os_tsk_prio_self ( 2 );
 	
@@ -283,7 +345,7 @@ __task void init_task( void ) {
 	{
 		ball_array[i].x = i*(320/MAX_BALLS); ball_array[i].y = i*(240/MAX_BALLS);
 		ball_array[i].xdir = (rand()%2)*2 - 1; ball_array[i].ydir = (rand()%2)*2 - 1;
-		ball_array[i].rad = N/2;
+		ball_array[i].rad = radii[i];
 		ball_array[i].colour = colours[i];
 	}
 	
@@ -306,27 +368,33 @@ __task void init_task( void ) {
 			
 			createCircle(ball);
 			
-			if (ball->x >= 320 - N/2)
+			if (ball->x >= 320 - ball->rad)
 				ball->xdir = -1*ball->xdir;
-			else if (ball->x < N/2){
+			else if (ball->x < ball->rad){
 				ball->xdir = -1*ball->xdir;
-				ball->x = N/2;
+				ball->x = ball->rad;
 			}
 			
-			if (ball->y >= 240 - N/2)
+			if (ball->y >= 240 - ball->rad)
 				ball->ydir = -1*ball->ydir;
-			else if (ball->y < N/2){
+			else if (ball->y < ball->rad){
 				ball->ydir = -1*ball->ydir;
-				ball->y = N/2;
+				ball->y = ball->rad;
 			}
 
+// 			for (j = i + 1; j < nballs; j++)
+// 			{
+// 				if (colliding(ball, j))
+// 					//printf("%i with %i",i,j);
+// 			}
+			
 			ball->vx = ball->xdir*pot;
 			ball->vy = ball->ydir*pot;
 			
 			eraseCircle(ball);
 			
-			GLCD_Bitmap (ball->x+ball->vx - ball->rad, ball->y+ball->vy - ball->rad, N, N, (unsigned char*)circle);
-			GLCD_Bitmap (ball->x - ball->rad, ball->y - ball->rad, N, N, (unsigned char*)circle2);
+			GLCD_Bitmap (ball->x+ball->vx - ball->rad, ball->y+ball->vy - ball->rad, 2*ball->rad, 2*ball->rad, (unsigned char*)circle);
+			GLCD_Bitmap (ball->x - ball->rad, ball->y - ball->rad, 2*ball->rad, 2*ball->rad, (unsigned char*)circle2);
 
 			ball->x += ball->vx; 
 			ball->y += ball->vy;
