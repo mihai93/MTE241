@@ -289,44 +289,16 @@ int colliding(ball_t *ball, int j)
 	return 0;
 }
 
-void trajectory(int i, int j)
+void trajectory(ball_t *ball, int j)
 {
-	int x, y, m, m1, m2, vx, vy, vdx, vdy, fy, sign, a, dvx, R;
-	R = 0;
+	int d, xd, yd, xtd, ytd;
 	
-	m1 = ball_array[i].rad;
-	m2 = ball_array[j].rad;
-	m = m2/m1;
+	xd = (ball->x + ball->rad/2) - (ball_array[j].x + ball_array[j].rad/2);
+	yd = (ball->y + ball->rad/2) - (ball_array[j].y + ball_array[j].rad/2);
+	d = sqrt((xd*xd) + (yd*yd));
+	xtd = xd*((ball->rad + ball_array[j].rad-d)/d);
+	ytd = yd*((ball->rad + ball_array[j].rad-d)/d);
 	
-	x = ball_array[j].x - ball_array[i].x;
-	y = ball_array[j].y - ball_array[i].y;
-	vx = ball_array[j].vx - ball_array[i].vx;
-	vy = ball_array[j].vy - ball_array[i].vy;
-	
-	vdx = (m1*ball_array[i].vx*m2*ball_array[j].vx)/(m1+m2);
-	vdy = (m1*ball_array[i].vy*m2*ball_array[j].vy)/(m1+m2);
-	
-	if((vx*x + vy*y) >= 0)
-		return;
-	
-	fy = 1.0e-12*abs(y);
-	if (abs(x) < fy)
-	{
-		sign = x < 0 ? -1 : 1;
-		x = fy*sign;
-	}
-	
-	a = y/x;
-	dvx = -2*(vx + a*vy)/(1+a*a)*(1+m);
-	ball_array[j].vx += dvx;
-	ball_array[j].vy += a*dvx;
-	ball_array[i].vx -= m*dvx;
-	ball_array[i].vy -= a*m*dvx;
-	
-	ball_array[i].vx = (ball_array[i].vx - vdx)*R + vdx;
-	ball_array[i].vy = (ball_array[i].vy - vdy)*R + vdy;
-	ball_array[j].vx = (ball_array[j].vx - vdx)*R + vdx;
-	ball_array[j].vy = (ball_array[j].vy - vdy)*R + vdy;
 }
 
 __task void init_task( void ) {
