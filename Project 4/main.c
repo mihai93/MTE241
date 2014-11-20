@@ -5,7 +5,6 @@
 #include <LPC17xx.h>
 #include "GLCD.h"
 #include <time.h>
-#include "uart.h"
 
 #define BG 0xFFFF
 #define FG	0xF81F
@@ -274,15 +273,15 @@ int colliding(ball_t *ball, int j)
 {
 	int xd, yd, radSum, radSqr, distSqr;
 	
-	xd = ball->x - ball_array[j].x;
-	yd = ball->x - ball_array[j].x;
+	xd = (ball->x + ball->rad/2) - (ball_array[j].x + ball_array[j].rad/2);
+	yd = (ball->y + ball->rad/2) - (ball_array[j].y + ball_array[j].rad/2);
 	
 	radSum = ball->rad + ball_array[j].rad;
 	radSqr = radSum * radSum;
 	
 	distSqr = (xd*xd) + (yd*yd);
 	
-	if (distSqr <= radSqr)
+	if (distSqr < radSqr)
 	{
 		return 1;
 	}
@@ -332,7 +331,7 @@ void trajectory(int i, int j)
 
 __task void init_task( void ) {
 	unsigned short int pot;
-	int i, j, x, y, count;
+	int i, j, x, y, count, numCol;
 	
 	os_tsk_prio_self ( 2 );
 	
@@ -353,6 +352,7 @@ __task void init_task( void ) {
 	
 	nballs = 0;
 	count = 0;
+	numCol = 0;
 	while(1)
 	{
 		for (i = 0; i < nballs; i++)
@@ -382,11 +382,16 @@ __task void init_task( void ) {
 				ball->y = ball->rad;
 			}
 
-// 			for (j = i + 1; j < nballs; j++)
-// 			{
-// 				if (colliding(ball, j))
-// 					//printf("%i with %i",i,j);
-// 			}
+			for (j = i + 1; j < nballs; j++)
+			{
+				if (colliding(ball, j))
+				{
+					ball->xdir = -1*ball_array[j].xdir;
+					
+// 					printf("Col#: %i : %i with %i\n",numCol,i,j);
+// 					numCol += 1;
+				}
+			}
 			
 			ball->vx = ball->xdir*pot;
 			ball->vy = ball->ydir*pot;
@@ -408,9 +413,15 @@ int main( void ) {
 	SystemInit();
 	SystemCoreClockUpdate();
 	
+	printf(" ");
+	
 	ADCInit();
 	LEDInit();
  	INT0Init();
 
 	os_sys_init(init_task);
+	
+	while ( 1 ) {
+		// Endless loop
+	}
 }
