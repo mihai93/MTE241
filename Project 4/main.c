@@ -10,10 +10,10 @@
 #define BG 0xFFFF
 #define FG	0xF81F
 #define MAX_DIAM 50
-#define MAX_BALLS	5
+#define MAX_BALLS	7
 
-unsigned short colours[MAX_BALLS]	= {0xF81F, 0x07E0, 0xF800, 0x03EF, 0x001F};
-unsigned short radii[MAX_BALLS] = {22.5, 15, 10, 25, 17.5};
+unsigned short colours[MAX_BALLS]	= {Magenta, Green, Red, DarkCyan, Blue, DarkGreen, Purple};
+unsigned short radii[MAX_BALLS] = {22.5, 15, 10, 25, 17.5, 7.5, 12.5};
 unsigned short circle[MAX_DIAM*MAX_DIAM];
 unsigned short circle2[MAX_DIAM*MAX_DIAM];
 
@@ -40,6 +40,9 @@ volatile unsigned char ADC_Done = 0;
 volatile unsigned char nballs = 0;
 
 int createBall = 0;
+int count;
+int prevCount;
+int prevJ;
 
 void LEDInit( void ) {
 
@@ -282,8 +285,10 @@ int colliding(ball_t *ball, int j)
 	
 	distSqr = (xd*xd) + (yd*yd);
 	
-	if (distSqr < radSqr)
+	if (distSqr < radSqr && !(count == prevCount && prevJ == j))
 	{
+		prevCount = count;
+		prevJ = j;
 		return 1;
 	}
 	
@@ -372,7 +377,7 @@ void trajectory(ball_t *ball, int j)
 
 __task void init_task( void ) {
 	unsigned short int pot;
-	int i, j, x, y, count, numCol;
+	int i, j, x, y, numCol;
 	
 	os_tsk_prio_self ( 2 );
 	
@@ -427,12 +432,11 @@ __task void init_task( void ) {
 			{
 				if (colliding(ball, j))
 				{
-					trajectory(ball, j);
-// 					ball->xdir = ball_array[j].xdir;
-// 					ball_array[j].xdir = -1*ball_array[j].xdir;
+					ball->xdir = ball_array[j].xdir;
+					ball_array[j].xdir = -1*ball_array[j].xdir;
 					
-					printf("Col#: %i : %i with %i\n",numCol,i,j);
-					numCol += 1;
+					ball->ydir = ball_array[j].ydir;
+					ball_array[j].ydir = -1*ball_array[j].ydir;
 				}
 			}
 			
