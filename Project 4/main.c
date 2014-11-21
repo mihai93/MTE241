@@ -292,96 +292,82 @@ int colliding(ball_t *ball, int j)
 
 void trajectory(ball_t *ball, int j)
 {
-	int d, xd, yd, xtd, ytd, v, vx1, vy1, vx2, vy2, xtdn, ytdn,
-			vx, vy, vn, i, ix, iy, im1, im2, impulse, mtd;
+	double x1, y1, x2, y2, vx1, vy1, vx2, vy2, r1, r2, nx, ny, n,
+				 unx, uny, utx, uty, vn1, vt1, vn2, vt2,
+				 vtf1, vtf2, vnf1, vnf2, vnfx1, vnfy1,
+				 vnfx2, vnfy2, xd, yd, d, xtd, ytd, im1, im2;
 	
+	x1 = ball->x + ball->rad;
+	y1 = ball->y + ball->rad;
+	x2 = ball_array[j].x + ball_array[j].rad;
+	y2 = ball_array[j].y + ball_array[j].rad;
 	vx1 = ball->vx*ball->xdir;
 	vy1 = ball->vy*ball->ydir;
-	vx2 = ball->vx*ball->xdir;
-	vy2 = ball->vy*ball->ydir;
+	vx2 = ball_array[j].vx*ball_array[j].xdir;
+	vy2 = ball_array[j].vy*ball_array[j].ydir;
+	r1 = ball->rad;
+	r2 = ball_array[j].rad;
 	
-	xd = (ball->x + ball->rad/2) - (ball_array[j].x + ball_array[j].rad/2);
-	yd = (ball->y + ball->rad/2) - (ball_array[j].y + ball_array[j].rad/2);
-	d = sqrt((xd*xd) + (yd*yd));
-	xtd = xd*(((ball->rad + ball_array[j].rad)-d)/d);
-	ytd = yd*(((ball->rad + ball_array[j].rad)-d)/d);
-	mtd = sqrt((xtd*xtd)+(ytd*ytd));
-	xtdn = xtd/mtd;
-	ytdn = ytd/mtd;
+	nx = x2 - x1;
+	ny = y2 - y1;
 	
-	im1 = 1/ball->rad;
-	im2 = 1/ball_array[j].rad;
+	n = sqrt((nx*nx)+(ny*ny));
+	unx = nx/n;
+	uny = ny/n;
 	
-	ball->x += xtd*(im1/(im1+im2));
-	ball->y += ytd*(im1/(im1+im2));
+	utx = -uny;
+	uty = unx;
 	
-	ball_array[j].x -= xtd*(im2/(im1+im2));
-	ball_array[j].y -= ytd*(im2/(im1+im2));
+	vn1 = unx*vx1 + uny*vy1;
+	vt1 = utx*vx1 + uty*vy1;
 	
-	vx = vx1 - vx2;
-	vy = vy1 - vy2;
-	vn = (vx*xtdn)+(vy*ytdn);
+	vn2 = unx*vx2 + uny*vy2;
+	vt2 = utx*vx2 + uty*vy2;
 	
-// 	if (vx1 < 0)
-// 	{
-// 		ball->vx = vx1*-1;
-// 		ball->xdir = -1;
-// 	}
+	vtf1 = vt1;
+	vtf2 = vt2;
+	
+	vnf1 = (vn1*(r1-r2)+(2*r2*vn2))/(r1+r2);
+	vnf2 = (vn2*(r2-r1)+(2*r1*vn1))/(r1+r2);
+	
+	vnfx1 = vnf1*unx;
+	vnfy1 = vnf1*uny;
+	
+	vnfx2 = vnf2*unx;
+	vnfy2 = vnf2*uny;
+	
+	vx1 = vnfx1 + vtf1;
+	vy1 = vnfy1 + vtf1;
+	
+	vx2 = vnfx2 + vtf2;
+	vy2 = vnfy2 + vtf2;
+	
+	ball->xdir = vx1/abs(vx1);
+	ball->vx = vx1/ball->xdir;
+	
+	ball->ydir = vy1/abs(vy1);
+	ball->vy = vy1/ball->ydir;
+	
+	ball_array[j].xdir = vx2/abs(vx2);
+	ball_array[j].vx = vx2/ball_array[j].xdir;
+	
+	ball_array[j].ydir = vy2/abs(vy2);
+	ball_array[j].vy = vy2/ball_array[j].ydir;
+	
+// 	xd = x1 - x2;
+// 	yd = y1 - y2;
+// 	d = sqrt((xd*xd) + (yd*yd));
+// 	xtd = xd*(((r1+r2)-d)/d);
+// 	ytd = yd*(((r1+r2)-d)/d);
 // 	
-// 	if (vy1 < 0)
-// 	{
-// 		ball->vy = -1*vy1;
-// 		ball->ydir = -1;
-// 	}
+// 	im1 = 1/r1;
+// 	im2 = 1/r2;
 // 	
-// 	if (vx2 < 0)
-// 	{
-// 		ball_array[j].vx = -1*vx2;
-// 		ball_array[j].xdir = -1;
-// 	}
+// 	ball->x += xtd;
+// 	ball->y += ytd;
 // 	
-// 	if (vy2 < 0)
-// 	{
-// 		ball_array[j].vy = -1*vy2;
-// 		ball_array[j].ydir = -1;
-// 	}
-// 	
-	if (vn > 0) return;
-	
-	i = -1*vn/(im1+im2);
-	
-	ix = xtd*i;
-	iy = ytd*i;
-	
-	vx1 += ix*im1;
-	vy1 += iy*im1;
-	vx2 -= ix*im2;
-	vy2 -= iy*im2;
-	
-// 	if (vx1 < 0)
-// 	{
-// 		ball->vx = vx1*-1;
-// 		ball->xdir = -1;
-// 	}
-// 	
-// 	if (vy1 < 0)
-// 	{
-// 		ball->vy = -1*vy1;
-// 		ball->ydir = -1;
-// 	}
-// 	
-// 	if (vx2 < 0)
-// 	{
-// 		ball_array[j].vx = -1*vx2;
-// 		ball_array[j].xdir = -1;
-// 	}
-// 	
-// 	if (vy2 < 0)
-// 	{
-// 		ball_array[j].vy = -1*vy2;
-// 		ball_array[j].ydir = -1;
-// 	}
-	
+// 	ball_array[j].x -= xtd;
+// 	ball_array[j].y -= ytd;
 }
 
 __task void init_task( void ) {
@@ -437,7 +423,7 @@ __task void init_task( void ) {
 				ball->y = ball->rad;
 			}
 
-			for (j = i + 1; j < nballs; j++)
+			for (j = i+1; j < nballs; j++)
 			{
 				if (colliding(ball, j))
 				{
@@ -445,8 +431,8 @@ __task void init_task( void ) {
 // 					ball->xdir = ball_array[j].xdir;
 // 					ball_array[j].xdir = -1*ball_array[j].xdir;
 					
-// 					printf("Col#: %i : %i with %i\n",numCol,i,j);
-// 					numCol += 1;
+					printf("Col#: %i : %i with %i\n",numCol,i,j);
+					numCol += 1;
 				}
 			}
 			
