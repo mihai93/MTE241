@@ -1,7 +1,5 @@
 # MTE 241 Introduction to Computer Structures and Real-time Systems
 
-Hi. You've ventured this far I might as well let you know what you're looking at.
-
 In MTE241 we were required to develop the following projects on a Keil MCB1700 evaluation board using real-time systems theory.
 
 ## Project 1
