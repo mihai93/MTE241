@@ -1,5 +1,4 @@
-# MTE241
-Introduction to Computer Structures and Real-time Systems
+# MTE 241 Introduction to Computer Structures and Real-time Systems
 
 Hi. You've ventured this far I might as well let you know what you're looking at.
 
