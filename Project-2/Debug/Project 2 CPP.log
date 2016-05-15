@@ -1,0 +1,24 @@
+﻿Build started 10/11/2014 11:56:09.
+     1>Project "D:\Users\Mike\Dropbox\2B\MTE241\Project 2 CPP\Project 2 CPP\Project 2 CPP.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TC /analyze- /errorReport:prompt main.c
+         main.c
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(66): warning C4244: '=' : conversion from 'unsigned long' to 'unsigned char', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(124): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(126): warning C4244: 'initializing' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(139): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(141): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(142): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(177): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(182): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(184): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(185): warning C4244: '=' : conversion from 'double' to 'int', possible loss of data
+     1>d:\users\mike\dropbox\2b\mte241\project 2 cpp\project 2 cpp\main.c(127): warning C4101: 'headerVal' : unreferenced local variable
+       Link:
+         D:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Users\Mike\Dropbox\2B\MTE241\Project 2 CPP\Debug\Project 2 CPP.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Users\Mike\Dropbox\2B\MTE241\Project 2 CPP\Debug\Project 2 CPP.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Users\Mike\Dropbox\2B\MTE241\Project 2 CPP\Debug\Project 2 CPP.lib" /MACHINE:X86 Debug\main.obj
+         Project 2 CPP.vcxproj -> D:\Users\Mike\Dropbox\2B\MTE241\Project 2 CPP\Debug\Project 2 CPP.exe
+     1>Done Building Project "D:\Users\Mike\Dropbox\2B\MTE241\Project 2 CPP\Project 2 CPP\Project 2 CPP.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:00.22
